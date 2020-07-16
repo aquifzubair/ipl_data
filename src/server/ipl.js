@@ -37,4 +37,38 @@ const matchesWonPerTeamPerYear = (json) => {
   );
 };
 
-module.exports = { matchesPerYear, matchesWonPerTeamPerYear };
+const extraRunPerTeamIn2016 = (match, delivery) => {
+  const dataOf2016 = [];
+  const output = { 2016: {} };
+  for (let item of match) {
+    if (item.season == 2016) {
+      dataOf2016.push(item);
+    }
+  }
+  const arrayOfIds = dataOf2016.map((item) => item.id);
+  for (var item of delivery) {
+    for (let i = 0; i < arrayOfIds.length; i++) {
+      if (item.match_id == arrayOfIds[i]) {
+        if (output["2016"].hasOwnProperty(item.bowling_team)) {
+          output["2016"][item.bowling_team] += parseInt(item.extra_runs);
+        } else {
+          output["2016"][item.bowling_team] = 0;
+        }
+      }
+    }
+  }
+  fs.writeFile(
+    "./../output/extraRunPerTeamIn2016.json",
+    JSON.stringify(output),
+    function (err) {
+      if (err) console.error("Not able to write file", err);
+      console.log("Extra run per team in 2016 file Saved!");
+    }
+  );
+};
+
+module.exports = {
+  matchesPerYear,
+  matchesWonPerTeamPerYear,
+  extraRunPerTeamIn2016,
+};

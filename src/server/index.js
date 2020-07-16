@@ -2,7 +2,7 @@ const csv = require("csvtojson");
 
 const matchCsvFilePath = "./../data/matches.csv";
 
-const  {matchesPerYear } = require("./ipl");
+const  {matchesPerYear, matchesWonPerTeamPerYear } = require("./ipl");
 
 async function runFunctions() {
   // converting data from csv to json
@@ -10,6 +10,7 @@ async function runFunctions() {
 
   //calling all four functions
   matchesPerYear(matchJsonData);
+  matchesWonPerTeamPerYear(matchJsonData);
   
 }
 

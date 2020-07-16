@@ -7,6 +7,7 @@ const {
   matchesPerYear,
   matchesWonPerTeamPerYear,
   extraRunPerTeamIn2016,
+  topTenEconomicalBowlerIn2015,
 } = require("./ipl");
 
 async function runFunctions() {
@@ -18,6 +19,7 @@ async function runFunctions() {
   matchesPerYear(matchJsonData);
   matchesWonPerTeamPerYear(matchJsonData);
   extraRunPerTeamIn2016(matchJsonData, deliveryJsonData);
+  topTenEconomicalBowlerIn2015(matchJsonData, deliveryJsonData);
 }
 
 runFunctions();

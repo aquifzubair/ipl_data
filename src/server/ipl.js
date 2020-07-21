@@ -74,11 +74,15 @@ const topTenEconomicalBowlerIn2015 = (match, delivery) => {
       dataOf2015.push(item);
     }
   }
+  console.log(dataOf2015);
+
   for (let item of delivery) {
     for (let items of dataOf2015) {
-      if (item.id == items.match_id) {
+      if (item.match_id == items.id) {
         if (output[item.bowler]) {
-          output[item.bowler].bowl += 1;
+          let wideBall = item.wide_runs || 0;
+          let noBall = item.noball_runs || 0;
+          output[item.bowler].bowl += 1 - wideBall - noBall;
           output[item.bowler].runs += +item.total_runs;
         } else {
           output[item.bowler] = {};
@@ -93,13 +97,8 @@ const topTenEconomicalBowlerIn2015 = (match, delivery) => {
   const resultArr = [];
 
   for (let bowler in output) {
-    if (output[bowler].bowl > 6) {
-      output[bowler].economy = (
-        output[bowler].runs /
-        (output[bowler].bowl / 6)
-      ).toFixed(2);
-      arrayOfEconomy.push(output[bowler].economy);
-    }
+    output[bowler].economy = output[bowler].runs / (output[bowler].bowl / 6);
+    arrayOfEconomy.push(output[bowler].economy);
   }
 
   arrayOfEconomy.sort((a, b) => a - b);

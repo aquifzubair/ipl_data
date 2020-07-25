@@ -1,7 +1,7 @@
 const fs = require("fs");
 
-const matchesPerYear = (json) => {
-  const output = json.reduce((acc, currVal) => {
+const matchesPerYear = (matches) => {
+  const matchPerYear = matches.reduce((acc, currVal) => {
     if (acc[currVal.season]) acc[currVal.season]++;
     else acc[currVal.season] = 1;
     return acc;
@@ -9,7 +9,7 @@ const matchesPerYear = (json) => {
 
   fs.writeFile(
     "./../output/matchesPerYear.json",
-    JSON.stringify(output),
+    JSON.stringify(matchPerYear),
     (err) => {
       if (err) console.error("Not able to write file", err);
       console.log("Matches per year file saved!");
@@ -17,8 +17,8 @@ const matchesPerYear = (json) => {
   );
 };
 
-const matchesWonPerTeamPerYear = (json) => {
-  const output = json.reduce((acc, currVal) => {
+const matchesWonPerTeamPerYear = (matches) => {
+  const matchWonPerYear = matches.reduce((acc, currVal) => {
     if (acc[currVal.season]) {
       if (acc[currVal.season][currVal.winner])
         acc[currVal.season][currVal.winner]++;
@@ -29,98 +29,95 @@ const matchesWonPerTeamPerYear = (json) => {
 
   fs.writeFile(
     "./../output/wonMatchesPerYear.json",
-    JSON.stringify(output),
-    function (err) {
+    JSON.stringify(matchWonPerYear),
+    (err) => {
       if (err) console.error("Not able to write file", err);
       console.log("Matches won per team per year file Saved!");
     }
   );
 };
 
-const extraRunPerTeamIn2016 = (match, delivery) => {
-  const dataOf2016 = [];
-  const output = { 2016: {} };
-  for (let item of match) {
-    if (item.season == 2016) {
-      dataOf2016.push(item);
+const matchOfParticularYear = (matches, year) => {
+  //function to calculate matches in a particular Year
+  return matches.filter((match) => match.season == year);
+};
+
+const deliveryOfParticularYear = (matches, deliveries, year) => {
+  // Function to calculate delivery in a particular Year
+  let matchOfYear = matchOfParticularYear(matches, year);
+  return deliveries.filter((delivery) => {
+    for (let match of matchOfYear) {
+      if (delivery.match_id == match.id) return true;
+    }
+    return false;
+  });
+};
+
+const extraRunPerTeamIn2016 = (matches, deliveries) => {
+  const deliveryOf2016 = deliveryOfParticularYear(matches, deliveries, 2016);
+  const extraRunIn2016 = {};
+
+  for (let delivery of deliveryOf2016) {
+    if (extraRunIn2016.hasOwnProperty(delivery.bowling_team)) {
+      extraRunIn2016[delivery.bowling_team] += +delivery.extra_runs;
+    } else {
+      extraRunIn2016[delivery.bowling_team] = 0;
     }
   }
-  const arrayOfIds = dataOf2016.map((item) => item.id);
-  for (var item of delivery) {
-    for (let i = 0; i < arrayOfIds.length; i++) {
-      if (item.match_id == arrayOfIds[i]) {
-        if (output["2016"].hasOwnProperty(item.bowling_team)) {
-          output["2016"][item.bowling_team] += parseInt(item.extra_runs);
-        } else {
-          output["2016"][item.bowling_team] = 0;
-        }
-      }
-    }
-  }
+
   fs.writeFile(
     "./../output/extraRunPerTeamIn2016.json",
-    JSON.stringify(output),
-    function (err) {
+    JSON.stringify(extraRunIn2016),
+    (err) => {
       if (err) console.error("Not able to write file", err);
       console.log("Extra run per team in 2016 file Saved!");
     }
   );
 };
-const topTenEconomicalBowlerIn2015 = (match, delivery) => {
-  const dataOf2015 = [];
-  const output = [];
-  for (let item of match) {
-    if (item.season == 2015) {
-      dataOf2015.push(item);
-    }
-  }
-  console.log(dataOf2015);
 
-  for (let item of delivery) {
-    for (let items of dataOf2015) {
-      if (item.match_id == items.id) {
-        if (output[item.bowler]) {
-          let wideBall = item.wide_runs || 0;
-          let noBall = item.noball_runs || 0;
-          output[item.bowler].bowl += 1 - wideBall - noBall;
-          output[item.bowler].runs += +item.total_runs;
-        } else {
-          output[item.bowler] = {};
-          output[item.bowler].bowl = 1;
-          output[item.bowler].runs = +item.total_runs;
-        }
-      }
+const topTenEconomicalBowlerIn2015 = (matches, deliveries) => {
+  const deliveryOf2015 = deliveryOfParticularYear(matches, deliveries, 2015);
+  let bowlerData = [];
+
+  for (let delivery of deliveryOf2015) {
+    if (bowlerData[delivery.bowler]) {
+      let wideBall = delivery.wide_runs || 0;
+      let noBall = delivery.noball_runs || 0;
+      bowlerData[delivery.bowler].bowl += 1 - wideBall - noBall;
+      bowlerData[delivery.bowler].runs += +delivery.total_runs;
+    } else {
+      bowlerData[delivery.bowler] = {};
+      bowlerData[delivery.bowler].bowl = 1;
+      bowlerData[delivery.bowler].runs = +delivery.total_runs;
     }
   }
 
-  const arrayOfEconomy = [];
-  const resultArr = [];
+  const bowlerEconomy = [];
+  const top10Bowler = [];
 
-  for (let bowler in output) {
-    output[bowler].economy = output[bowler].runs / (output[bowler].bowl / 6);
-    arrayOfEconomy.push(output[bowler].economy);
+  for (let bowler in bowlerData) {
+    bowlerData[bowler].economy =
+      bowlerData[bowler].runs / (bowlerData[bowler].bowl / 6);
+    bowlerEconomy.push(bowlerData[bowler].economy);
   }
 
-  arrayOfEconomy.sort((a, b) => a - b);
+  bowlerEconomy.sort((a, b) => a - b);
 
-  for (let bowlers in output) {
-    if (
-      output[bowlers].economy <= +arrayOfEconomy[9] &&
-      +output[bowlers].economy !== 0
-    ) {
+  for (let bowlers in bowlerData) {
+    if (bowlerData[bowlers].economy <= +bowlerEconomy[9]) {
       let finalObj = {};
       finalObj.bowler = Object.values(bowlers).join("");
-      finalObj.economy = output[bowlers].economy;
-      resultArr.push(finalObj);
+      finalObj.economy = bowlerData[bowlers].economy;
+      top10Bowler.push(finalObj);
     }
   }
 
-  resultArr.sort((a, b) => a.economy - b.economy);
+  top10Bowler.sort((a, b) => a.economy - b.economy);
 
   fs.writeFile(
     "./../output/topTenBestBowlerByEconomy.json",
-    JSON.stringify(resultArr),
-    function (err) {
+    JSON.stringify(top10Bowler),
+    (err) => {
       if (err) console.error("Not able to write file", err);
       console.log("Top 10 economy bowler in 2015 file Saved!");
     }

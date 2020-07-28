@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded",async  () => {
+
     let extraRunPerTeamIn2016 = await fetch("http://localhost:3000/extraRunPerTeamIn2016", {
       "Content-Type": "text/json",
       "Access-Control-Allow-Origin": "*",
@@ -10,9 +11,7 @@ document.addEventListener("DOMContentLoaded",async  () => {
         name: key,
         y: extraRunPerTeamIn2016[key],
       }
-    })
-    
-    console.log(hightChartData)
+    })    
     
       Highcharts.chart("container2", {
         chart: {
@@ -62,7 +61,6 @@ document.addEventListener("DOMContentLoaded",async  () => {
           },
         ]
       });
-    }
-    
+    }    
     );
     

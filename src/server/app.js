@@ -44,6 +44,7 @@ const server = http.createServer(function (request, response) {
         "Content-Type": "text/json",
         "Access-Control-Allow-Origin": "*",
       });
+      response.write('404 Oops! page not found')
       response.end();
     }
   }

@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       type: "column",
     },
     title: {
-      text: "Top ten Economical Bowler in 2015",
+      text: '<span style="font-size:20px;font-weight:bold;">Top ten Economical Bowlers in 2015</span>',
     },
 
     accessibility: {
@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
     yAxis: {
       title: {
-        text: "Bowler Economy",
+        text: '<span style="font-size:11px;font-weight:bold;">Bowler Economy</span>',
       },
     },
     legend: {
@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
 
     tooltip: {
-      headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+      headerFormat: '<span style="font-size:11px;font-weight:bold;">{series.name}</span><br>',
       pointFormat:
-        '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b><br/>',
+        '<span style="color:{point.color};font-weight:bold;">{point.name}</span>: <b>{point.y:.2f}</b><br/>',
     },
 
     series: [

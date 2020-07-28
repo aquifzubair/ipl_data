@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded",async  () => {
           type: "column",
         },
         title: {
-          text: "Extra Run Per Team in 2016",
+          text: '<span style="font-size:20px;font-weight:bold;">Extra Run Per Team in 2016</span>',
         },
       
         accessibility: {
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded",async  () => {
         },
         yAxis: {
           title: {
-            text: "Total No of Extra Runs",
+            text: '<span style="font-size:11px;font-weight:bold;">Total No of Extra Runs</span>',
           },
         },
         legend: {
@@ -48,9 +48,9 @@ document.addEventListener("DOMContentLoaded",async  () => {
         },
     
         tooltip: {
-          headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+          headerFormat: '<span style="font-size:11px;font-weight:bold;">{series.name}</span><br>',
           pointFormat:
-            '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.0f}</b><br/>',
+            '<span style="color:{point.color};font-weight:bold;">{point.name}</span>: <b>{point.y:.0f}</b><br/>',
         },
     
         series: [

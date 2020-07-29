@@ -190,6 +190,61 @@ const highestNumberOfMOM = (matches) => {
   );
 };
 
+//function to get the run and bowal of a player in particular year
+const playerRunAndBowlData = (match, deliveries, player, year) => {
+  let deliver = deliveryOfParticularYear(match, deliveries, year);
+  let batsmanData = {};
+
+  for (let delivery of deliver) {
+    if (delivery.batsman == player) {
+      if (batsmanData[year]) {
+        batsmanData[year].bowl += 1;
+        batsmanData[year].runs += +delivery.batsman_runs;
+      } else {
+        batsmanData[year] = {};
+        batsmanData[year].bowl = 1;
+        batsmanData[year].runs = +delivery.batsman_runs;
+      }
+    }
+  }
+
+  if (Object.keys(batsmanData).length !== 0) return batsmanData;
+};
+
+const playerDataWithEconomy = (match, deliveries, player) => {
+  let batsmanDataOfAllYears = [];
+  let years = match.map((elem) => elem.season);
+  arrayOfYears = [...new Set(years)];
+  for (let i = 0; i < arrayOfYears.length; i++) {
+    let batsmanDataOfaYear = playerRunAndBowlData(
+      match,
+      deliveries,
+      player,
+      arrayOfYears[i]
+    );
+    batsmanDataOfAllYears.push(batsmanDataOfaYear);
+  }
+
+  let strikeRateOfBatsman = batsmanDataOfAllYears.map((elem, i) => {
+    let eco = (elem[arrayOfYears[i]].runs / elem[arrayOfYears[i]].bowl) * 100;
+    return {
+      [arrayOfYears[i]]: eco,
+    };
+  });
+
+  let strikeRateOfABatsmanInEveryYear = {};
+  strikeRateOfABatsmanInEveryYear[player] = strikeRateOfBatsman;
+
+  fs.writeFile(
+    "./../output/strikeRateOfParticularPerson.json",
+    JSON.stringify(strikeRateOfABatsmanInEveryYear),
+    (err) => {
+      if (err) console.error("Not able to write file", err);
+      console.log(`strike rate of ${player} is saved`);
+    }
+  );
+};
+
 module.exports = {
   matchesPerYear,
   matchesWonPerTeamPerYear,
@@ -197,4 +252,5 @@ module.exports = {
   topTenEconomicalBowlerIn2015,
   teamWonTheTosAndWonMatch,
   highestNumberOfMOM,
+  playerDataWithEconomy,
 };

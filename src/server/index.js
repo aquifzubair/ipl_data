@@ -11,7 +11,8 @@ const {
   extraRunPerTeamIn2016,
   topTenEconomicalBowlerIn2015,
   teamWonTheTosAndWonMatch,
-  highestNumberOfMOM
+  highestNumberOfMOM,
+  playerDataWithEconomy,
 } = require("./ipl");
 
 async function runFunctions() {
@@ -25,7 +26,8 @@ async function runFunctions() {
   extraRunPerTeamIn2016(matchJsonData, deliveryJsonData);
   topTenEconomicalBowlerIn2015(matchJsonData, deliveryJsonData);
   teamWonTheTosAndWonMatch(matchJsonData);
-  highestNumberOfMOM(matchJsonData)
+  highestNumberOfMOM(matchJsonData);
+  playerDataWithEconomy(matchJsonData, deliveryJsonData, "MS Dhoni");
 }
 
 runFunctions();

@@ -47,6 +47,10 @@ const server = http.createServer(function (request, response) {
       readGivenFile("./../output/strikeRateOfParticularPerson.json");
       break;
     }
+    case "/bowlerOfBestEconomy": {
+      readGivenFile("./../output/bowlerOfBestEconomy.json");
+      break;
+    }
     default: {
       response.writeHead(404, {
         "Content-Type": "text/json",

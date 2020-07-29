@@ -8,7 +8,7 @@ const matchesPerYear = (matches) => {
   }, {});
 
   fs.writeFile(
-    "./../output/matchesPerYear.json",
+    "./../output/matchesperYear.json",
     JSON.stringify(matchPerYear),
     (err) => {
       if (err) console.error("Not able to write file", err);
@@ -124,9 +124,35 @@ const topTenEconomicalBowlerIn2015 = (matches, deliveries) => {
   );
 };
 
+const teamWonTheTosAndWonMatch = (matches) => {
+  const teamsWonMatchAndToss = matches.reduce((acc, currVal) => {
+    if (!acc[currVal.toss_winner]) {
+      if (currVal.toss_winner === currVal.winner) {
+        acc[currVal.toss_winner] = 1;
+      }
+    } else if (acc[currVal.toss_winner]) {
+      if (currVal.toss_winner === currVal.winner) {
+        acc[currVal.toss_winner]++;
+      }
+    }
+
+    return acc;
+  }, {});
+
+  fs.writeFile(
+    "./../output/teamsWonMatchAndToss.json",
+    JSON.stringify(teamsWonMatchAndToss),
+    (err) => {
+      if (err) console.error("Not able to write file", err);
+      console.log("Team Win Match and Toss File Saved");
+    }
+  );
+};
+
 module.exports = {
   matchesPerYear,
   matchesWonPerTeamPerYear,
   extraRunPerTeamIn2016,
   topTenEconomicalBowlerIn2015,
+  teamWonTheTosAndWonMatch,
 };

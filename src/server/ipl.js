@@ -190,7 +190,7 @@ const highestNumberOfMOM = (matches) => {
   );
 };
 
-//function to get the run and bowal of a player in particular year
+//function to get the run and bowl of a player in particular year
 const playerRunAndBowlData = (match, deliveries, player, year) => {
   let deliver = deliveryOfParticularYear(match, deliveries, year);
   let batsmanData = {};
@@ -245,6 +245,43 @@ const playerDataWithEconomy = (match, deliveries, player) => {
   );
 };
 
+const mostTimePlayerDismissedByOtherPlayer = (deliveries) => {
+  let outDelivery = deliveries.filter((bowl) => bowl.player_dismissed != "");
+
+  let numberOfOuts = {};
+  outDelivery.map((bowl) => {
+    if (numberOfOuts[`${bowl.batsman} outBy ${bowl.bowler}`]) {
+      numberOfOuts[`${bowl.batsman} outBy ${bowl.bowler}`]++;
+    } else {
+      numberOfOuts[`${bowl.batsman} outBy ${bowl.bowler}`] = 1;
+    }
+  });
+  
+  let sortedNumberOfOuts = Object.entries(numberOfOuts).sort(
+    (a, b) => b[1] - a[1]
+  );
+
+  const maximumTimes = sortedNumberOfOuts[0][1];
+
+  let playerWithHighestTimesOutByAPlayer = [];
+  for (let item of sortedNumberOfOuts) {
+    if (item[1] == maximumTimes) {
+      playerWithHighestTimesOutByAPlayer.push(item);
+    }
+  }
+
+  fs.writeFile(
+    "./../output/playerWithHighestTimesOutByAPlayer.json",
+    JSON.stringify(playerWithHighestTimesOutByAPlayer),
+    (err) => {
+      if (err) console.error("Not able to write file", err);
+      console.log(
+        `player with highest number of time out by a player file saved`
+      );
+    }
+  );
+};
+
 module.exports = {
   matchesPerYear,
   matchesWonPerTeamPerYear,
@@ -253,4 +290,5 @@ module.exports = {
   teamWonTheTosAndWonMatch,
   highestNumberOfMOM,
   playerDataWithEconomy,
+  mostTimePlayerDismissedByOtherPlayer,
 };

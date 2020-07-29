@@ -13,6 +13,7 @@ const {
   teamWonTheTosAndWonMatch,
   highestNumberOfMOM,
   playerDataWithEconomy,
+  mostTimePlayerDismissedByOtherPlayer,
 } = require("./ipl");
 
 async function runFunctions() {
@@ -28,6 +29,7 @@ async function runFunctions() {
   teamWonTheTosAndWonMatch(matchJsonData);
   highestNumberOfMOM(matchJsonData);
   playerDataWithEconomy(matchJsonData, deliveryJsonData, "MS Dhoni");
+  mostTimePlayerDismissedByOtherPlayer(deliveryJsonData);
 }
 
 runFunctions();

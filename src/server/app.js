@@ -51,6 +51,10 @@ const server = http.createServer(function (request, response) {
       readGivenFile("./../output/bowlerOfBestEconomy.json");
       break;
     }
+    case "/playerWithHighestTimesOutByAPlayer": {
+      readGivenFile("./../output/playerWithHighestTimesOutByAPlayer.json");
+      break;
+    }
     default: {
       response.writeHead(404, {
         "Content-Type": "text/json",

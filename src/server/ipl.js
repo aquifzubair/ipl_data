@@ -256,7 +256,7 @@ const mostTimePlayerDismissedByOtherPlayer = (deliveries) => {
       numberOfOuts[`${bowl.batsman} outBy ${bowl.bowler}`] = 1;
     }
   });
-  
+
   let sortedNumberOfOuts = Object.entries(numberOfOuts).sort(
     (a, b) => b[1] - a[1]
   );
@@ -282,6 +282,56 @@ const mostTimePlayerDismissedByOtherPlayer = (deliveries) => {
   );
 };
 
+// function to get the delivery of only super over
+const deliveryOfSuperOver = (deliveries) => {
+  let delOfSuperOver = deliveries.filter((delivery) => {
+    if (delivery.is_super_over !== "0") {
+      return delivery;
+    }
+  });
+  return delOfSuperOver;
+};
+
+const ballerWithBestEconomyInSuperOver = (deliveries) => {
+  const deliveryOfSuperOvers = deliveryOfSuperOver(deliveries);
+  const dataWithBowlEconomy = deliveryOfSuperOvers.reduce((acc, currVal) => {
+    let wideBall = +currVal.wide_runs;
+    let noBall = +currVal.noball_runs;
+    if (acc[currVal.bowler]) {
+      acc[currVal.bowler].balls += 1 - wideBall - noBall;
+      acc[currVal.bowler].runs += +currVal.total_runs;
+    } else {
+      acc[currVal.bowler] = {};
+      acc[currVal.bowler].balls = 1 - wideBall - noBall;
+      acc[currVal.bowler].runs = +currVal.total_runs;
+    }
+    return acc;
+  }, []);
+
+  const economyArray = Object.entries(dataWithBowlEconomy).map((player) => {
+    return [[player[0]], player[1].runs / (player[1].balls / 6)];
+  });
+  const flattenArray = economyArray.flat(2);
+
+  const groupedArrayOfBowlerAndEconomy = [];
+  for (let i = 0; i < flattenArray.length; i += 2) {
+    groupedArrayOfBowlerAndEconomy.push([flattenArray[i], flattenArray[i + 1]]);
+  }
+
+  const bowlerOfBestEconomy = groupedArrayOfBowlerAndEconomy
+    .sort((a, b) => a[1] - b[1])
+    .shift();
+
+  fs.writeFile(
+    "./../output/bowlerOfBestEconomy.json",
+    JSON.stringify(bowlerOfBestEconomy),
+    (err) => {
+      if (err) console.error("Not able to write file", err);
+      console.log(`bowler of best economy  file saved`);
+    }
+  );
+};
+
 module.exports = {
   matchesPerYear,
   matchesWonPerTeamPerYear,
@@ -291,4 +341,5 @@ module.exports = {
   highestNumberOfMOM,
   playerDataWithEconomy,
   mostTimePlayerDismissedByOtherPlayer,
+  ballerWithBestEconomyInSuperOver,
 };

@@ -14,6 +14,7 @@ const {
   highestNumberOfMOM,
   playerDataWithEconomy,
   mostTimePlayerDismissedByOtherPlayer,
+  ballerWithBestEconomyInSuperOver,
 } = require("./ipl");
 
 async function runFunctions() {
@@ -30,6 +31,7 @@ async function runFunctions() {
   highestNumberOfMOM(matchJsonData);
   playerDataWithEconomy(matchJsonData, deliveryJsonData, "MS Dhoni");
   mostTimePlayerDismissedByOtherPlayer(deliveryJsonData);
+  ballerWithBestEconomyInSuperOver(deliveryJsonData);
 }
 
 runFunctions();

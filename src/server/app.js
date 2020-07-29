@@ -55,6 +55,11 @@ const server = http.createServer(function (request, response) {
       readGivenFile("./../output/playerWithHighestTimesOutByAPlayer.json");
       break;
     }
+    
+    case "/maximumMomPlayerInEverySeason": {
+      readGivenFile("./../output/maximumMomPlayerInEverySeason.json");
+      break;
+    }
     default: {
       response.writeHead(404, {
         "Content-Type": "text/json",

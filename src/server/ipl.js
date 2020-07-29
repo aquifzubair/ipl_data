@@ -168,7 +168,7 @@ const highestNumberOfMOM = (matches) => {
     let mat = Object.entries(allPlayers[year]);
     mat.sort((a, b) => b[1] - a[1]);
     let highest = mat.shift();
-    arrayOfPlayerAndMostMom.push({ [year]: { [highest[0]]: highest[1] } });
+    arrayOfPlayerAndMostMom.push([year, highest[0], highest[1]]);
   });
 
   fs.writeFile(

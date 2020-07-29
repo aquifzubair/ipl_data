@@ -149,10 +149,52 @@ const teamWonTheTosAndWonMatch = (matches) => {
   );
 };
 
+const highestNumberOfMOM = (matches) => {
+  const allPlayers = matches.reduce((acc, currVal) => {
+    if (!acc[currVal.season]) {
+      acc[currVal.season] = {};
+    } else {
+      if (!acc[currVal.season][currVal.player_of_match]) {
+        acc[currVal.season][currVal.player_of_match] = 1;
+      } else {
+        acc[currVal.season][currVal.player_of_match]++;
+      }
+    }
+    return acc;
+  }, {});
+
+  let arrayOfPlayerAndMom = Object.keys(allPlayers).map((year) => {
+    let mat = Object.entries(allPlayers[year]);
+    return mat;
+  });
+
+  let arrayOfMaximumMomInEverySeason = arrayOfPlayerAndMom.map((value) => {
+    return value.sort((a, b) => b[1] - a[1]).shift();
+  });
+
+  let maximumMomPlayerInEverySeason = arrayOfMaximumMomInEverySeason.reduce(
+    (acc, currVal) => {
+      acc[currVal[0]] = currVal[1];
+      return acc;
+    },
+    {}
+  );
+
+  fs.writeFile(
+    "./../output/maximumMomPlayerInEverySeason.json",
+    JSON.stringify(maximumMomPlayerInEverySeason),
+    (err) => {
+      if (err) console.error("Not able to write file", err);
+      console.log("maximum no of MOM in a season file saved");
+    }
+  );
+};
+
 module.exports = {
   matchesPerYear,
   matchesWonPerTeamPerYear,
   extraRunPerTeamIn2016,
   topTenEconomicalBowlerIn2015,
   teamWonTheTosAndWonMatch,
+  highestNumberOfMOM,
 };

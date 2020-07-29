@@ -11,6 +11,7 @@ const {
   extraRunPerTeamIn2016,
   topTenEconomicalBowlerIn2015,
   teamWonTheTosAndWonMatch,
+  highestNumberOfMOM
 } = require("./ipl");
 
 async function runFunctions() {
@@ -24,6 +25,7 @@ async function runFunctions() {
   extraRunPerTeamIn2016(matchJsonData, deliveryJsonData);
   topTenEconomicalBowlerIn2015(matchJsonData, deliveryJsonData);
   teamWonTheTosAndWonMatch(matchJsonData);
+  highestNumberOfMOM(matchJsonData)
 }
 
 runFunctions();

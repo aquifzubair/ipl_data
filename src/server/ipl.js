@@ -163,26 +163,17 @@ const highestNumberOfMOM = (matches) => {
     return acc;
   }, {});
 
-  let arrayOfPlayerAndMom = Object.keys(allPlayers).map((year) => {
+  let arrayOfPlayerAndMostMom = [];
+  Object.keys(allPlayers).map((year) => {
     let mat = Object.entries(allPlayers[year]);
-    return mat;
+    mat.sort((a, b) => b[1] - a[1]);
+    let highest = mat.shift();
+    arrayOfPlayerAndMostMom.push({ [year]: { [highest[0]]: highest[1] } });
   });
-
-  let arrayOfMaximumMomInEverySeason = arrayOfPlayerAndMom.map((value) => {
-    return value.sort((a, b) => b[1] - a[1]).shift();
-  });
-
-  let maximumMomPlayerInEverySeason = arrayOfMaximumMomInEverySeason.reduce(
-    (acc, currVal) => {
-      acc[currVal[0]] = currVal[1];
-      return acc;
-    },
-    {}
-  );
 
   fs.writeFile(
     "./../output/maximumMomPlayerInEverySeason.json",
-    JSON.stringify(maximumMomPlayerInEverySeason),
+    JSON.stringify(arrayOfPlayerAndMostMom),
     (err) => {
       if (err) console.error("Not able to write file", err);
       console.log("maximum no of MOM in a season file saved");

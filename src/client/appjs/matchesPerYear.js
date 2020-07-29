@@ -17,7 +17,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       type: "column",
     },
     title: {
-      text: '<span style="font-size:20px;font-weight:bold;">Number of Matches Every Year in IPL</span>',
+      text:
+        '<span style="font-size:20px;font-weight:bold;">Number of Matches Every Year in IPL</span>',
     },
 
     accessibility: {
@@ -30,7 +31,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
     yAxis: {
       title: {
-        text:  '<span style="font-size:11px;font-weight:bold;">Total No of Matches</span>',
+        text:
+          '<span style="font-size:11px;font-weight:bold;">Total No of Matches</span>',
       },
     },
     legend: {
@@ -47,7 +49,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
 
     tooltip: {
-      headerFormat: '<span style="font-size:11px;font-weight:bold;">{series.name}</span><br>',
+      headerFormat:
+        '<span style="font-size:11px;font-weight:bold;">{series.name}</span><br>',
       pointFormat:
         '<span style="color:{point.color};font-weight:bold;">{point.name}</span>: <b>{point.y:.0f}</b><br/>',
     },

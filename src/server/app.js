@@ -24,7 +24,7 @@ const server = http.createServer(function (request, response) {
   };
   switch (request.url) {
     case "/matchesPerYear": {
-      readGivenFile("./../output/matchesPerYear.json");
+      readGivenFile("./../output/matchesperYear.json");
       break;
     }
     case "/extraRunPerTeamIn2016": {
@@ -39,6 +39,10 @@ const server = http.createServer(function (request, response) {
       readGivenFile("./../output/topTenBestBowlerByEconomy.json");
       break;
     }
+    case "/teamsWonMatchAndToss": {
+      readGivenFile("./../output/teamsWonMatchAndToss.json");
+      break;
+    }   
     default: {
       response.writeHead(404, {
         "Content-Type": "text/json",

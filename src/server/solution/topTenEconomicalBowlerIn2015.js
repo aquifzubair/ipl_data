@@ -2,14 +2,14 @@ const fs = require('fs');
 const {deliveryOfParticularYear} = require('./commonFunctions')
 
 const topTenEconomicalBowlerIn2015 = (matches, deliveries) => {
-  
+
     const deliveryOf2015 = deliveryOfParticularYear(matches, deliveries, 2015);
-    let bowlerData = [];
+    const bowlerData = [];
   
     for (let delivery of deliveryOf2015) {
       if (bowlerData[delivery.bowler]) {
-        let wideBall = delivery.wide_runs || 0;
-        let noBall = delivery.noball_runs || 0;
+       const wideBall = delivery.wide_runs || 0;
+       const noBall = delivery.noball_runs || 0;
         bowlerData[delivery.bowler].bowl += 1 - wideBall - noBall;
         bowlerData[delivery.bowler].runs += +delivery.total_runs;
       } else {

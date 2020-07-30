@@ -5,8 +5,9 @@ const bowlerHavingBestEconomyInSuperOver = (deliveries) => {
   const deliveryOfSuperOvers = deliveryOfSuperOver(deliveries);
 
   const dataWithBowlEconomy = deliveryOfSuperOvers.reduce((acc, currVal) => {
-    let wideBall = +currVal.wide_runs;
-    let noBall = +currVal.noball_runs;
+    const wideBall = +currVal.wide_runs;
+    const noBall = +currVal.noball_runs;
+
     if (acc[currVal.bowler]) {
       acc[currVal.bowler].balls += 1 - wideBall - noBall;
       acc[currVal.bowler].runs += +currVal.total_runs;

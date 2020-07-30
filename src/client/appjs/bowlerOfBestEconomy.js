@@ -1,14 +1,24 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  let matchesPerYear = await fetch(
-    "http://localhost:3000/bowlerOfBestEconomy",
-    {
-      "Content-Type": "text/json",
-      "Access-Control-Allow-Origin": "*",
-    }
-  );
-  matchesPerYear = await matchesPerYear.json();
 
-  const hightChartData = [{ name: matchesPerYear[0], y: matchesPerYear[1] }];
+  let bowlerOfBestEconomy;
+  
+  try {
+    bowlerOfBestEconomy = await fetch(
+      "http://localhost:3000/bowlerOfBestEconomy",
+      {
+        "Content-Type": "text/json",
+        "Access-Control-Allow-Origin": "*",
+      }
+    );
+    bowlerOfBestEconomy = await bowlerOfBestEconomy.json();
+  } 
+  catch (err) {
+    console.error(err);
+  }
+
+  const hightChartData = [
+    { name: bowlerOfBestEconomy.name, y: bowlerOfBestEconomy.economy },
+  ];
 
   Highcharts.chart("container7", {
     chart: {

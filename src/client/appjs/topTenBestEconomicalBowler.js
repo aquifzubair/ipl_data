@@ -1,12 +1,19 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  let topTenBestEconomicalBowler = await fetch(
-    "http://localhost:3000/topTenBestBowlerByEconomy",
-    {
-      "Content-Type": "text/json",
-      "Access-Control-Allow-Origin": "*",
-    }
-  );
-  topTenBestEconomicalBowler = await topTenBestEconomicalBowler.json();
+  let topTenBestEconomicalBowler;
+
+  try {
+    topTenBestEconomicalBowler = await fetch(
+      "http://localhost:3000/topTenBestBowlerByEconomy",
+      {
+        "Content-Type": "text/json",
+        "Access-Control-Allow-Origin": "*",
+      }
+    );
+    topTenBestEconomicalBowler = await topTenBestEconomicalBowler.json();
+  } 
+  catch (err) {
+    console.error(err);
+  }
 
   const hightChartData = topTenBestEconomicalBowler.map((key) => {
     return {
@@ -20,7 +27,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       type: "column",
     },
     title: {
-      text: '<span style="font-size:20px;font-weight:bold;">Top ten Economical Bowlers in 2015</span>',
+      text:
+        '<span style="font-size:20px;font-weight:bold;">Top ten Economical Bowlers in 2015</span>',
     },
 
     accessibility: {
@@ -33,7 +41,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
     yAxis: {
       title: {
-        text: '<span style="font-size:11px;font-weight:bold;">Bowler Economy</span>',
+        text:
+          '<span style="font-size:11px;font-weight:bold;">Bowler Economy</span>',
       },
     },
     legend: {
@@ -50,7 +59,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
 
     tooltip: {
-      headerFormat: '<span style="font-size:11px;font-weight:bold;">{series.name}</span><br>',
+      headerFormat:
+        '<span style="font-size:11px;font-weight:bold;">{series.name}</span><br>',
       pointFormat:
         '<span style="color:{point.color};font-weight:bold;">{point.name}</span>: <b>{point.y:.2f}</b><br/>',
     },

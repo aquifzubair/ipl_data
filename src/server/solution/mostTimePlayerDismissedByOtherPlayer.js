@@ -5,6 +5,7 @@ const mostTimePlayerDismissedByOtherPlayer = (deliveries) => {
 
   const numberOfOuts = {};
   const combinationArray = [];
+  
   outDelivery.map((bowl) => {
     if (numberOfOuts[`${bowl.batsman},outBy,${bowl.bowler}`]) {
       numberOfOuts[`${bowl.batsman},outBy,${bowl.bowler}`]++;

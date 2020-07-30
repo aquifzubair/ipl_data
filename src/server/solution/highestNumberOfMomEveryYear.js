@@ -14,11 +14,11 @@ const highestNumberOfMomEveryYear = (matches) => {
     return acc;
   }, {});
 
-  let arrayOfPlayerAndMostMom = [];
+  const arrayOfPlayerAndMostMom = [];
   Object.keys(allPlayers).map((year) => {
-    let mat = Object.entries(allPlayers[year]);
+    const mat = Object.entries(allPlayers[year]);
     mat.sort((a, b) => b[1] - a[1]);
-    let highest = mat.shift();
+    const highest = mat.shift();
     arrayOfPlayerAndMostMom.push([year, highest[0], highest[1]]);
   });
 

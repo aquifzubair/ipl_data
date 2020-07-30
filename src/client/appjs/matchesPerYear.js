@@ -1,9 +1,16 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  let matchesPerYear = await fetch("http://localhost:3000/matchesPerYear", {
-    "Content-Type": "text/json",
-    "Access-Control-Allow-Origin": "*",
-  });
-  matchesPerYear = await matchesPerYear.json();
+  let matchesPerYear;
+
+  try {
+    matchesPerYear = await fetch("http://localhost:3000/matchesPerYear", {
+      "Content-Type": "text/json",
+      "Access-Control-Allow-Origin": "*",
+    });
+    matchesPerYear = await matchesPerYear.json();
+  } 
+  catch (err) {
+    console.log(err);
+  }
 
   const hightChartData = Object.keys(matchesPerYear).map((key) => {
     return {

@@ -1,17 +1,24 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  let highestTimeOutPlayers = await fetch(
-    "http://localhost:3000/playerWithHighestTimesOutByAPlayer",
-    {
-      "Content-Type": "text/json",
-      "Access-Control-Allow-Origin": "*",
-    }
-  );
-  highestTimeOutPlayers = await highestTimeOutPlayers.json();
+  let highestTimeOutPlayers;
+  
+  try {
+    highestTimeOutPlayers = await fetch(
+      "http://localhost:3000/mostTimePlayerDismissedByOtherPlayer",
+      {
+        "Content-Type": "text/json",
+        "Access-Control-Allow-Origin": "*",
+      }
+    );
+    highestTimeOutPlayers = await highestTimeOutPlayers.json();
+  } 
+  catch (err) {
+    console.error(err);
+  }
 
   const hightChartData = highestTimeOutPlayers.map((key) => {
     return {
-      name: key[0],
-      y: key[1],
+      name: `${key.batsman} outBy ${key.outBy}`,
+      y: key.outTimes,
     };
   });
 

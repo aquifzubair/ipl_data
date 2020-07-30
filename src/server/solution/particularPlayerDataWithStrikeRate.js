@@ -16,7 +16,7 @@ const particularPlayerDataWithStrikeRate = (match, deliveries, player) => {
     }
   
     const strikeRateOfBatsman = batsmanDataOfAllYears.map((elem, i) => {
-      let eco = (elem[arrayOfYears[i]].runs / elem[arrayOfYears[i]].bowl) * 100;
+      const eco = (elem[arrayOfYears[i]].runs / elem[arrayOfYears[i]].bowl) * 100;
       return {
         [arrayOfYears[i]]: eco,
       };

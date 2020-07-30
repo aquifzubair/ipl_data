@@ -1,28 +1,30 @@
 document.addEventListener("DOMContentLoaded", async () => {
+  let matchesWonPerYear;
 
-  let matchesWonPerYear = await fetch(
-    "http://localhost:3000/wonMatchesPerYear",
-    {
+  try {
+    matchesWonPerYear = await fetch("http://localhost:3000/wonMatchesPerYear", {
       "Content-Type": "text/json",
       "Access-Control-Allow-Origin": "*",
-    }
-  );
-
-  matchesWonPerYear = await matchesWonPerYear.json();
+    });
+    matchesWonPerYear = await matchesWonPerYear.json();
+  } 
+  catch (err) {
+    console.error(err);
+  }
 
   const year = Object.keys(matchesWonPerYear).map((key) => {
     return key;
   });
 
-  let teamsInIpl = Object.values(matchesWonPerYear).reduce(
+  const teamsInIpl = Object.values(matchesWonPerYear).reduce(
     (acc, currVal) => acc.concat(Object.keys(currVal)),
     []
   );
 
-  let uniqueTeams = [...new Set(teamsInIpl)];
+  const uniqueTeams = [...new Set(teamsInIpl)];
 
-  let arrayOfTeamsWithWinMatches = uniqueTeams.map((ele) => {
-    let valuesOfMatchesWonPerYear = Object.values(matchesWonPerYear).reduce(
+  const arrayOfTeamsWithWinMatches = uniqueTeams.map((ele) => {
+    const valuesOfMatchesWonPerYear = Object.values(matchesWonPerYear).reduce(
       (acc, currVal) => {
         if (!acc[ele]) {
           acc[ele] = [];
@@ -40,7 +42,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   arrayOfTeamsWithWinMatches.splice(10, 1);
 
-  let matchWonDataToVisualize = arrayOfTeamsWithWinMatches.map((ele) => {
+  const matchWonDataToVisualize = arrayOfTeamsWithWinMatches.map((ele) => {
     return { name: ele.name, data: ele[ele.name] };
   });
 
@@ -49,7 +51,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       type: "column",
     },
     title: {
-      text: '<span style="font-size:20px;font-weight:bold;">Matches Won Per Year</span>',
+      text:
+        '<span style="font-size:20px;font-weight:bold;">Matches Won Per Year</span>',
     },
     xAxis: {
       categories: year,
@@ -58,11 +61,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     yAxis: {
       min: 0,
       title: {
-        text: '<span style="font-size:11px;font-weight:bold;">No of Matches Won</span>',
+        text:
+          '<span style="font-size:11px;font-weight:bold;">No of Matches Won</span>',
       },
     },
     tooltip: {
-      headerFormat: '<span style="font-size:10px;font-weight:bold;">{point.key}</span><table>',
+      headerFormat:
+        '<span style="font-size:10px;font-weight:bold;">{point.key}</span><table>',
       pointFormat:
         '<tr><td style="color:{series.color};padding:0;font-weight:bold;">{series.name}: </td>' +
         '<td style="padding:0"><b>{point.y:.0f} win</b></td></tr>',

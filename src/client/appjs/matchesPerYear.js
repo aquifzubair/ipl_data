@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   let matchesPerYear;
 
   try {
-    matchesPerYear = await fetch("http://localhost:3000/matchesPerYear", {
+    matchesPerYear = await fetch("http://localhost:3000/matchesPerYearSql", {
       "Content-Type": "text/json",
       "Access-Control-Allow-Origin": "*",
     });
@@ -12,12 +12,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.log(err);
   }
 
-  const hightChartData = Object.keys(matchesPerYear).map((key) => {
-    return {
-      name: key,
-      y: matchesPerYear[key],
-    };
-  });
+  const hightChartData = matchesPerYear.map(elem => {
+    return{
+      name:elem.season,
+      y:elem.num_of_matches
+    }
+  })
+  
 
   Highcharts.chart("container1", {
     chart: {

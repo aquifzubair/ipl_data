@@ -1,9 +1,27 @@
 const http = require("http");
 const fs = require("fs");
-const port = 3000;
 
-const server = http.createServer((request, response) =>  {
+const mysql = require("mysql");
+const config = require("./../../config");
 
+const port = config.port;
+
+const connection = mysql.createConnection({
+  host: config.host,
+  database: config.database,
+  password: config.password,
+  user: config.user,
+});
+
+connection.connect(function(err) {
+  if (err) {
+    return console.error('error: ' + err.message);
+  }
+
+  console.log('Connected to the MySQL server.');
+});
+
+const server = http.createServer((request, response) => {
   const readGivenFile = (path) => {
     return new Promise((resolve, reject) => {
       fs.readFile(path, (err, content) => {
@@ -55,24 +73,17 @@ const server = http.createServer((request, response) =>  {
       break;
     }
 
-    case "/matchesPerYear": {
-      readGivenFile("./../output/matchesPerYear.json")
-        .then((content) => {
-          response.writeHead(200, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(content);
+    case "/matchesPerYearSql": {
+      let sql = `select season, count(season) as num_of_matches from matches group by season;`;
+      connection.query(sql, (error, results) => {
+        if (error) {
+          console.error(error.message);
+          response.writeHead(500);
           response.end();
-        })
-        .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
-        });
+        }
+        response.write(JSON.stringify(results));
+        response.end();
+      });
       break;
     }
 
@@ -390,7 +401,7 @@ const server = http.createServer((request, response) =>  {
         });
       break;
     }
-    
+
     case "/highestNumberOfMomEveryYear": {
       readGivenFile("./../output/highestNumberOfMomEveryYear.json")
         .then((content) => {
@@ -445,4 +456,6 @@ const server = http.createServer((request, response) =>  {
 });
 
 server.listen(port);
+// connection.end();
+
 console.log("server is listening at port " + port);

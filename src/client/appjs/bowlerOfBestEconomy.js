@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   
   try {
     bowlerOfBestEconomy = await fetch(
-      "http://localhost:3000/bowlerOfBestEconomy",
+      "http://localhost:3000/bowlerOfBestEconomySql",
       {
         "Content-Type": "text/json",
         "Access-Control-Allow-Origin": "*",
@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   const hightChartData = [
-    { name: bowlerOfBestEconomy.name, y: bowlerOfBestEconomy.economy },
+    { name: bowlerOfBestEconomy[0].bowler, y: bowlerOfBestEconomy[0].economy },
   ];
 
   Highcharts.chart("container7", {

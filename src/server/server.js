@@ -22,7 +22,7 @@ connection.connect(function (err) {
 });
 
 const errorHandler = (response, err) => {
-  console.error(error);
+  console.error(err);
   response.write(err);
   response.writeHead(500);
   response.end();
@@ -75,7 +75,7 @@ const server = http.createServer((request, response) => {
     }
 
     case "/matchesPerYearSql": {
-      let sql = `select season, count(season) as num_of_matches from matches group by season;`;
+      let sql = `SELECT season, COUNT(season) AS num_of_matches FROM matches GROUP BY season;`;
       connection.query(sql, (err, results) => {
         if (err) {
           errorHandler(response, err);
@@ -196,19 +196,15 @@ const server = http.createServer((request, response) => {
       break;
     }
 
-    case "/teamsWonMatchAndToss": {
-      readGivenFile("./../output/teamsWonTossAndMatch.json")
-        .then((content) => {
-          response.writeHead(200, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(content);
-          response.end();
-        })
-        .catch((err) => {
+    case "/teamsWonMatchAndTossSql": {
+      let query = `SELECT winner,COUNT(winner) AS num_of_wins FROM matches WHERE winner = toss_winner GROUP BY winner;`;
+      connection.query(query, (err, results) => {
+        if (err) {
           errorHandler(response, err);
-        });
+        }
+        response.write(JSON.stringify(results));
+        response.end();
+      });
       break;
     }
 
@@ -260,19 +256,15 @@ const server = http.createServer((request, response) => {
       break;
     }
 
-    case "/bowlerOfBestEconomy": {
-      readGivenFile("./../output/bowlerHavingBestEconomyInSuperOver.json")
-        .then((content) => {
-          response.writeHead(200, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(content);
-          response.end();
-        })
-        .catch((err) => {
+    case "/bowlerOfBestEconomySql": {
+      const query = `SELECT bowler ,SUM(total_runs) /(COUNT(*)/6) as economy FROM deliveries WHERE is_super_over=1 AND noball_runs>0  GROUP BY bowler ORDER BY economy LIMIT 1;`
+      connection.query(query, (err, results) => {
+        if (err) {
           errorHandler(response, err);
-        });
+        }
+        response.write(JSON.stringify(results));
+        response.end();
+      });
       break;
     }
 

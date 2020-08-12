@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   try {
     wonMatchesAndToss = await fetch(
-      "http://localhost:3000/teamsWonMatchAndToss",
+      "http://localhost:3000/teamsWonMatchAndTossSql",
       {
         "Content-Type": "text/json",
         "Access-Control-Allow-Origin": "*",
@@ -15,10 +15,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error(err);
   }
 
-  const hightChartData = Object.keys(wonMatchesAndToss).map((key) => {
+  const hightChartData = wonMatchesAndToss.map((key) => {
     return {
-      name: key,
-      y: wonMatchesAndToss[key],
+      name: key.winner,
+      y: key.num_of_wins,
     };
   });
 

@@ -13,13 +13,20 @@ const connection = mysql.createConnection({
   user: config.user,
 });
 
-connection.connect(function(err) {
+connection.connect(function (err) {
   if (err) {
-    return console.error('error: ' + err.message);
+    return console.error("error: " + err.message);
   }
 
-  console.log('Connected to the MySQL server.');
+  console.log("Connected to the MySQL server.");
 });
+
+const errorHandler = (response, err) => {
+  console.error(error);
+  response.write(err);
+  response.writeHead(500);
+  response.end();
+};
 
 const server = http.createServer((request, response) => {
   const readGivenFile = (path) => {
@@ -46,8 +53,7 @@ const server = http.createServer((request, response) => {
           response.end();
         })
         .catch((err) => {
-          response.write(err);
-          response.end();
+          errorHandler(response, err);
         });
       break;
     }
@@ -63,23 +69,16 @@ const server = http.createServer((request, response) => {
           response.end();
         })
         .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "text/javascript",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
+          errorHandler(response, err);
         });
       break;
     }
 
     case "/matchesPerYearSql": {
       let sql = `select season, count(season) as num_of_matches from matches group by season;`;
-      connection.query(sql, (error, results) => {
-        if (error) {
-          console.error(error.message);
-          response.writeHead(500);
-          response.end();
+      connection.query(sql, (err, results) => {
+        if (err) {
+          errorHandler(response, err);
         }
         response.write(JSON.stringify(results));
         response.end();
@@ -98,34 +97,23 @@ const server = http.createServer((request, response) => {
           response.end();
         })
         .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "text/javascript",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
+          errorHandler(response, err);
         });
       break;
     }
 
-    case "/extraRunPerTeamIn2016": {
-      readGivenFile("./../output/extraRunPerTeamIn2016.json")
-        .then((content) => {
-          response.writeHead(200, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(content);
-          response.end();
-        })
-        .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
-        });
+    case "/extraRunPerTeamIn2016Sql": {
+      let query = `SELECT bowling_team, SUM(extra_runs) as extraRuns FROM deliveries WHERE 
+                    match_id >= (SELECT id FROM matches WHERE season=2016 ORDER BY id LIMIT 1) and 
+                    match_id <= (SELECT id FROM matches WHERE season=2016 ORDER BY id DESC LIMIT 1) 
+                    GROUP BY bowling_team;`;
+      connection.query(query, (err, results) => {
+        if (err) {
+          errorHandler(response, err);
+        }
+        response.write(JSON.stringify(results));
+        response.end();
+      });
       break;
     }
 
@@ -140,12 +128,7 @@ const server = http.createServer((request, response) => {
           response.end();
         })
         .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "text/javascript",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
+          errorHandler(response, err);
         });
       break;
     }
@@ -161,12 +144,7 @@ const server = http.createServer((request, response) => {
           response.end();
         })
         .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
+          errorHandler(response, err);
         });
       break;
     }
@@ -182,12 +160,7 @@ const server = http.createServer((request, response) => {
           response.end();
         })
         .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "text/javascript",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
+          errorHandler(response,err);
         });
       break;
     }
@@ -203,12 +176,7 @@ const server = http.createServer((request, response) => {
           response.end();
         })
         .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
+          errorHandler(response,err);
         });
       break;
     }
@@ -224,12 +192,7 @@ const server = http.createServer((request, response) => {
           response.end();
         })
         .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "text/javascript",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
+          errorHandler(response,err);
         });
       break;
     }
@@ -245,12 +208,7 @@ const server = http.createServer((request, response) => {
           response.end();
         })
         .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
+          errorHandler(response,err);
         });
       break;
     }
@@ -266,12 +224,7 @@ const server = http.createServer((request, response) => {
           response.end();
         })
         .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "text/javascript",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
+          errorHandler(response,err);
         });
       break;
     }
@@ -287,12 +240,7 @@ const server = http.createServer((request, response) => {
           response.end();
         })
         .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
+          errorHandler(response,err);
         });
       break;
     }
@@ -308,12 +256,7 @@ const server = http.createServer((request, response) => {
           response.end();
         })
         .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "text/javascript",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
+          errorHandler(response,err);
         });
       break;
     }
@@ -329,12 +272,7 @@ const server = http.createServer((request, response) => {
           response.end();
         })
         .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
+          errorHandler(response,err);
         });
       break;
     }
@@ -350,12 +288,7 @@ const server = http.createServer((request, response) => {
           response.end();
         })
         .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "text/javascript",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
+          errorHandler(response,err);
         });
       break;
     }
@@ -371,12 +304,7 @@ const server = http.createServer((request, response) => {
           response.end();
         })
         .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
+          errorHandler(response,err);
         });
       break;
     }
@@ -392,12 +320,7 @@ const server = http.createServer((request, response) => {
           response.end();
         })
         .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "text/javascript",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
+          errorHandler(response,err);
         });
       break;
     }
@@ -413,12 +336,7 @@ const server = http.createServer((request, response) => {
           response.end();
         })
         .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
+          errorHandler(response,err);
         });
       break;
     }
@@ -434,12 +352,7 @@ const server = http.createServer((request, response) => {
           response.end();
         })
         .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "text/css",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
+          errorHandler(response,err);
         });
       break;
     }

@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   try {
     extraRunPerTeamIn2016 = await fetch(
-      "http://localhost:3000/extraRunPerTeamIn2016",
+      "http://localhost:3000/extraRunPerTeamIn2016Sql",
       {
         "Content-Type": "text/json",
         "Access-Control-Allow-Origin": "*",
@@ -15,10 +15,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error(err);
   }
 
-  const hightChartData = Object.keys(extraRunPerTeamIn2016).map((key) => {
+  const hightChartData = extraRunPerTeamIn2016.map((key) => {
     return {
-      name: key,
-      y: extraRunPerTeamIn2016[key],
+      name:key.bowling_team,
+      y: key.extraRuns,
     };
   });
 

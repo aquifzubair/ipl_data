@@ -160,24 +160,23 @@ const server = http.createServer((request, response) => {
           response.end();
         })
         .catch((err) => {
-          errorHandler(response,err);
+          errorHandler(response, err);
         });
       break;
     }
 
-    case "/topTenBestBowlerByEconomy": {
-      readGivenFile("./../output/topTenBestBowlerByEconomy.json")
-        .then((content) => {
-          response.writeHead(200, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(content);
-          response.end();
-        })
-        .catch((err) => {
-          errorHandler(response,err);
-        });
+    case "/topTenBestBowlerByEconomySql": {
+      let query = `SELECT bowler ,SUM(total_runs)*6 /(COUNT(*)) as economy
+                    FROM deliveries WHERE match_id >= (SELECT id FROM matches WHERE season=2015 ORDER BY id LIMIT 1) AND 
+                    match_id <= (SELECT id FROM matches WHERE season=2015 ORDER BY id DESC LIMIT 1)
+                    GROUP BY bowler ORDER BY economy LIMIT 10;`;
+      connection.query(query, (err, results) => {
+        if (err) {
+          errorHandler(response, err);
+        }
+        response.write(JSON.stringify(results));
+        response.end();
+      });
       break;
     }
 
@@ -192,7 +191,7 @@ const server = http.createServer((request, response) => {
           response.end();
         })
         .catch((err) => {
-          errorHandler(response,err);
+          errorHandler(response, err);
         });
       break;
     }
@@ -208,7 +207,7 @@ const server = http.createServer((request, response) => {
           response.end();
         })
         .catch((err) => {
-          errorHandler(response,err);
+          errorHandler(response, err);
         });
       break;
     }
@@ -224,7 +223,7 @@ const server = http.createServer((request, response) => {
           response.end();
         })
         .catch((err) => {
-          errorHandler(response,err);
+          errorHandler(response, err);
         });
       break;
     }
@@ -240,7 +239,7 @@ const server = http.createServer((request, response) => {
           response.end();
         })
         .catch((err) => {
-          errorHandler(response,err);
+          errorHandler(response, err);
         });
       break;
     }
@@ -256,7 +255,7 @@ const server = http.createServer((request, response) => {
           response.end();
         })
         .catch((err) => {
-          errorHandler(response,err);
+          errorHandler(response, err);
         });
       break;
     }
@@ -272,7 +271,7 @@ const server = http.createServer((request, response) => {
           response.end();
         })
         .catch((err) => {
-          errorHandler(response,err);
+          errorHandler(response, err);
         });
       break;
     }
@@ -288,7 +287,7 @@ const server = http.createServer((request, response) => {
           response.end();
         })
         .catch((err) => {
-          errorHandler(response,err);
+          errorHandler(response, err);
         });
       break;
     }
@@ -304,7 +303,7 @@ const server = http.createServer((request, response) => {
           response.end();
         })
         .catch((err) => {
-          errorHandler(response,err);
+          errorHandler(response, err);
         });
       break;
     }
@@ -320,7 +319,7 @@ const server = http.createServer((request, response) => {
           response.end();
         })
         .catch((err) => {
-          errorHandler(response,err);
+          errorHandler(response, err);
         });
       break;
     }
@@ -336,7 +335,7 @@ const server = http.createServer((request, response) => {
           response.end();
         })
         .catch((err) => {
-          errorHandler(response,err);
+          errorHandler(response, err);
         });
       break;
     }
@@ -352,7 +351,7 @@ const server = http.createServer((request, response) => {
           response.end();
         })
         .catch((err) => {
-          errorHandler(response,err);
+          errorHandler(response, err);
         });
       break;
     }

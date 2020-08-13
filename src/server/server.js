@@ -1,9 +1,7 @@
 const http = require("http");
 const fs = require("fs");
-
 const mysql = require("mysql");
 const config = require("./../../config");
-
 const port = config.port;
 
 const connection = mysql.createConnection({
@@ -13,19 +11,29 @@ const connection = mysql.createConnection({
   user: config.user,
 });
 
-connection.connect(function (err) {
+connection.connect((err) => {
   if (err) {
     return console.error("error: " + err.message);
   }
-
   console.log("Connected to the MySQL server.");
 });
 
 const errorHandler = (response, err) => {
   console.error(err);
-  response.write(err);
+  response.write(err.message);
   response.writeHead(500);
   response.end();
+};
+
+const queryPromise = (query) => {
+  return new Promise((resolve, reject) => {
+    connection.query(query, (err, results) => {
+      if (err) {
+        reject(err.message);
+      }
+      resolve(results);
+    });
+  });
 };
 
 const server = http.createServer((request, response) => {
@@ -75,14 +83,15 @@ const server = http.createServer((request, response) => {
     }
 
     case "/matchesPerYearSql": {
-      let sql = `SELECT season, COUNT(season) AS num_of_matches FROM matches GROUP BY season;`;
-      connection.query(sql, (err, results) => {
-        if (err) {
-          errorHandler(response, err);
-        }
-        response.write(JSON.stringify(results));
-        response.end();
-      });
+      let query = `SELECT season, COUNT(season) AS num_of_matches FROM matches GROUP BY season;`;
+
+      queryPromise(query)
+        .then((data) => {
+          response.write(JSON.stringify(data));
+          response.end();
+        })
+        .catch((err) => errorHandler(response, err));
+
       break;
     }
 
@@ -107,13 +116,12 @@ const server = http.createServer((request, response) => {
                     match_id >= (SELECT id FROM matches WHERE season=2016 ORDER BY id LIMIT 1) and 
                     match_id <= (SELECT id FROM matches WHERE season=2016 ORDER BY id DESC LIMIT 1) 
                     GROUP BY bowling_team;`;
-      connection.query(query, (err, results) => {
-        if (err) {
-          errorHandler(response, err);
-        }
-        response.write(JSON.stringify(results));
-        response.end();
-      });
+      queryPromise(query)
+        .then((data) => {
+          response.write(JSON.stringify(data));
+          response.end();
+        })
+        .catch((err) => errorHandler(response, err));
       break;
     }
 
@@ -133,19 +141,14 @@ const server = http.createServer((request, response) => {
       break;
     }
 
-    case "/wonMatchesPerYear": {
-      readGivenFile("./../output/wonMatchesPerYear.json")
-        .then((content) => {
-          response.writeHead(200, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(content);
-          response.end();
-        })
-        .catch((err) => {
-          errorHandler(response, err);
-        });
+    case "/wonMatchesPerYearSql": {
+      const query = `select season,winner,count(id) AS wins from matches where winner != ''  group by season,winner;`
+      queryPromise(query)
+      .then((data) => {
+        response.write(JSON.stringify(data));
+        response.end();
+      })
+      .catch((err) => errorHandler(response, err));
       break;
     }
 
@@ -170,13 +173,12 @@ const server = http.createServer((request, response) => {
                     FROM deliveries WHERE match_id >= (SELECT id FROM matches WHERE season=2015 ORDER BY id LIMIT 1) AND 
                     match_id <= (SELECT id FROM matches WHERE season=2015 ORDER BY id DESC LIMIT 1)
                     GROUP BY bowler ORDER BY economy LIMIT 10;`;
-      connection.query(query, (err, results) => {
-        if (err) {
-          errorHandler(response, err);
-        }
-        response.write(JSON.stringify(results));
-        response.end();
-      });
+      queryPromise(query)
+        .then((data) => {
+          response.write(JSON.stringify(data));
+          response.end();
+        })
+        .catch((err) => errorHandler(response, err));
       break;
     }
 
@@ -198,13 +200,12 @@ const server = http.createServer((request, response) => {
 
     case "/teamsWonMatchAndTossSql": {
       let query = `SELECT winner,COUNT(winner) AS num_of_wins FROM matches WHERE winner = toss_winner GROUP BY winner;`;
-      connection.query(query, (err, results) => {
-        if (err) {
-          errorHandler(response, err);
-        }
-        response.write(JSON.stringify(results));
-        response.end();
-      });
+      queryPromise(query)
+        .then((data) => {
+          response.write(JSON.stringify(data));
+          response.end();
+        })
+        .catch((err) => errorHandler(response, err));
       break;
     }
 
@@ -257,14 +258,13 @@ const server = http.createServer((request, response) => {
     }
 
     case "/bowlerOfBestEconomySql": {
-      const query = `SELECT bowler ,SUM(total_runs) /(COUNT(*)/6) as economy FROM deliveries WHERE is_super_over=1 AND noball_runs>0  GROUP BY bowler ORDER BY economy LIMIT 1;`
-      connection.query(query, (err, results) => {
-        if (err) {
-          errorHandler(response, err);
-        }
-        response.write(JSON.stringify(results));
-        response.end();
-      });
+      const query = `SELECT bowler ,SUM(total_runs) /(COUNT(*)/6) as economy FROM deliveries WHERE is_super_over=1 AND noball_runs>0  GROUP BY bowler ORDER BY economy LIMIT 1;`;
+      queryPromise(query)
+        .then((data) => {
+          response.write(JSON.stringify(data));
+          response.end();
+        })
+        .catch((err) => errorHandler(response, err));
       break;
     }
 
@@ -284,19 +284,14 @@ const server = http.createServer((request, response) => {
       break;
     }
 
-    case "/mostTimePlayerDismissedByOtherPlayer": {
-      readGivenFile("./../output/mostTimePlayerDismissedByOtherPlayer.json")
-        .then((content) => {
-          response.writeHead(200, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(content);
+    case "/mostTimePlayerDismissedByOtherPlayerSql": {
+      const query = `SELECT batsman, bowler , COUNT(player_dismissed) AS dismissal_time FROM deliveries WHERE batsman=player_dismissed GROUP BY player_dismissed,batsman,bowler ORDER BY dismissal_time DESC LIMIT 1; `;
+      queryPromise(query)
+        .then((data) => {
+          response.write(JSON.stringify(data));
           response.end();
         })
-        .catch((err) => {
-          errorHandler(response, err);
-        });
+        .catch((err) => errorHandler(response, err));
       break;
     }
 

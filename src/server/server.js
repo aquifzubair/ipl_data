@@ -20,7 +20,6 @@ connection.connect((err) => {
 
 const errorHandler = (response, err) => {
   console.error(err);
-  response.write(err.message);
   response.writeHead(500);
   response.end();
 };
@@ -142,13 +141,13 @@ const server = http.createServer((request, response) => {
     }
 
     case "/wonMatchesPerYearSql": {
-      const query = `select season,winner,count(id) AS wins from matches where winner != ''  group by season,winner;`
+      const query = `select season,winner,count(id) AS wins from matches where winner != ''  group by season,winner;`;
       queryPromise(query)
-      .then((data) => {
-        response.write(JSON.stringify(data));
-        response.end();
-      })
-      .catch((err) => errorHandler(response, err));
+        .then((data) => {
+          response.write(JSON.stringify(data));
+          response.end();
+        })
+        .catch((err) => errorHandler(response, err));
       break;
     }
 
@@ -225,19 +224,17 @@ const server = http.createServer((request, response) => {
       break;
     }
 
-    case "/strikeRateOfParticularPerson": {
-      readGivenFile("./../output/strikeRateOfParticularPerson.json")
-        .then((content) => {
-          response.writeHead(200, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(content);
+    case "/strikeRateOfParticularPersonSql": {
+      let query = `SELECT batsman, season, (SUM(batsman_runs) / count(match_id) * 100) AS strikeRate FROM matches 
+                   INNER JOIN deliveries ON  matches.id = deliveries.match_id WHERE deliveries.batsman = 'MS Dhoni'  
+                   GROUP BY season;`;
+
+      queryPromise(query)
+        .then((data) => {
+          response.write(JSON.stringify(data));
           response.end();
         })
-        .catch((err) => {
-          errorHandler(response, err);
-        });
+        .catch((err) => errorHandler(response, err));
       break;
     }
 

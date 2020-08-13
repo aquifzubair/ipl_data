@@ -3,31 +3,23 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   try {
     strikeRateOfDhoni = await fetch(
-      "http://localhost:3000/strikeRateOfParticularPerson",
+      "http://localhost:3000/strikeRateOfParticularPersonSql",
       {
         "Content-Type": "text/json",
         "Access-Control-Allow-Origin": "*",
       }
     );
     strikeRateOfDhoni = await strikeRateOfDhoni.json();
-  } 
-  catch (err) {
+  } catch (err) {
     console.error(err);
   }
 
-  const highChartData = [];
-
-  strikeRateOfDhoni["MS Dhoni"].map((key) => {
-    Object.entries(key).map((val) => {
-      highChartData.push({
-        name: val[0],
-        y: val[1],
-      });
-    });
+  const highChartData = strikeRateOfDhoni.map((items) => {
+    return {
+      name: items.season,
+      y: items.strikeRate,
+    };
   });
-
-  const firstItem = highChartData.shift();
-  highChartData.push(firstItem);
 
   Highcharts.chart("container6", {
     chart: {

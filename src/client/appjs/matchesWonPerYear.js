@@ -2,49 +2,43 @@ document.addEventListener("DOMContentLoaded", async () => {
   let matchesWonPerYear;
 
   try {
-    matchesWonPerYear = await fetch("http://localhost:3000/wonMatchesPerYear", {
-      "Content-Type": "text/json",
-      "Access-Control-Allow-Origin": "*",
-    });
+    matchesWonPerYear = await fetch(
+      "http://localhost:3000/wonMatchesPerYearSql",
+      {
+        "Content-Type": "text/json",
+        "Access-Control-Allow-Origin": "*",
+      }
+    );
     matchesWonPerYear = await matchesWonPerYear.json();
-  } 
-  catch (err) {
+  } catch (err) {
     console.error(err);
   }
 
-  const year = Object.keys(matchesWonPerYear).map((key) => {
-    return key;
+  const baseSeason = 2008;
+  const winDetailsPerTeams = {};
+
+  for (let item of matchesWonPerYear) {
+    const teamName = item.winner;
+    const matchesWinByTeam = item.wins;
+    const season = item.season;
+
+    if (winDetailsPerTeams[teamName]) {
+      winDetailsPerTeams[teamName][season - baseSeason] = matchesWinByTeam;
+    } else {
+      winDetailsPerTeams[teamName] = new Array(10).fill(null, 0, 10);
+      winDetailsPerTeams[teamName][season - baseSeason] = matchesWinByTeam;
+    }
+  }
+
+  let dataToVisualize = Object.entries(winDetailsPerTeams).map((elem) => {
+    return {
+      name: elem[0],
+      data: elem[1],
+    };
   });
 
-  const teamsInIpl = Object.values(matchesWonPerYear).reduce(
-    (acc, currVal) => acc.concat(Object.keys(currVal)),
-    []
-  );
-
-  const uniqueTeams = [...new Set(teamsInIpl)];
-
-  const arrayOfTeamsWithWinMatches = uniqueTeams.map((ele) => {
-    const valuesOfMatchesWonPerYear = Object.values(matchesWonPerYear).reduce(
-      (acc, currVal) => {
-        if (!acc[ele]) {
-          acc[ele] = [];
-          acc[ele].push(currVal[ele] || null);
-        } else {
-          acc[ele].push(currVal[ele] || null);
-        }
-        return acc;
-      },
-      {}
-    );
-    valuesOfMatchesWonPerYear.name = ele;
-    return valuesOfMatchesWonPerYear;
-  });
-
-  arrayOfTeamsWithWinMatches.splice(10, 1);
-
-  const matchWonDataToVisualize = arrayOfTeamsWithWinMatches.map((ele) => {
-    return { name: ele.name, data: ele[ele.name] };
-  });
+  const year = matchesWonPerYear.map((elem) => elem.season);
+  const uniqueYear = [...new Set(year)];
 
   Highcharts.chart("container4", {
     chart: {
@@ -55,7 +49,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         '<span style="font-size:20px;font-weight:bold;">Matches Won Per Year</span>',
     },
     xAxis: {
-      categories: year,
+      categories: uniqueYear,
       crosshair: true,
     },
     yAxis: {
@@ -81,6 +75,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         borderWidth: 0,
       },
     },
-    series: matchWonDataToVisualize,
+    series: dataToVisualize,
   });
 });

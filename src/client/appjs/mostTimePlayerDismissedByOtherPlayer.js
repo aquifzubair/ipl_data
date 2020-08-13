@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   
   try {
     highestTimeOutPlayers = await fetch(
-      "http://localhost:3000/mostTimePlayerDismissedByOtherPlayer",
+      "http://localhost:3000/mostTimePlayerDismissedByOtherPlayerSql",
       {
         "Content-Type": "text/json",
         "Access-Control-Allow-Origin": "*",
@@ -17,8 +17,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const hightChartData = highestTimeOutPlayers.map((key) => {
     return {
-      name: `${key.batsman} outBy ${key.outBy}`,
-      y: key.outTimes,
+      name: `${key.batsman} outBy ${key.bowler}`,
+      y: key.dismissal_time,
     };
   });
 

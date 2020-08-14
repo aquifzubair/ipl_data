@@ -3,23 +3,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   try {
     maxNoOfMomPerYear = await fetch(
-      "http://localhost:3000/highestNumberOfMomEveryYear",
-      {
-        "Content-Type": "text/json",
-        "Access-Control-Allow-Origin": "*",
-      }
+      "http://localhost:3000/highestNumberOfMomEveryYear"
     );
     maxNoOfMomPerYear = await maxNoOfMomPerYear.json();
-  } 
-  catch (err) {
+    console.log(maxNoOfMomPerYear);
+  } catch (err) {
     console.error(err);
   }
 
   const hightChartData = maxNoOfMomPerYear.map((item) => {
-    let name = `${item.year} - ${item.name}`;
+    let name = `${item.season} - ${item.player_name}`;
     return {
       name: name,
-      y: item.noOfMom,
+      y: item.num_of_mom,
     };
   });
 

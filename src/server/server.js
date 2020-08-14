@@ -309,18 +309,16 @@ const server = http.createServer((request, response) => {
     }
 
     case "/highestNumberOfMomEveryYear": {
-      readGivenFile("./../output/highestNumberOfMomEveryYear.json")
-        .then((content) => {
-          response.writeHead(200, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(content);
-          response.end();
-        })
-        .catch((err) => {
-          errorHandler(response, err);
-        });
+      const query = `SELECT season, ANY_VALUE(player_of_match) AS player_name, MAX(mom) AS num_of_mom
+       FROM (SELECT season,player_of_match, COUNT(player_of_match) AS mom FROM matches 
+       GROUP BY season, player_of_match ORDER BY season,COUNT(player_of_match) DESC) AS maximum_mom_table 
+       GROUP BY season;`
+       queryPromise(query)
+       .then((data) => {
+         response.write(JSON.stringify(data));
+         response.end();
+       })
+       .catch((err) => errorHandler(response, err));
       break;
     }
 

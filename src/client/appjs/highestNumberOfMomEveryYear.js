@@ -9,11 +9,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         "Access-Control-Allow-Origin": "*",
       }
     );
-    maxNoOfMomPerYear = await maxNoOfMomPerYear.json();
-  } 
-  catch (err) {
-    console.error(err);
+
+    if (maxNoOfMomPerYear.status === 200) {
+      maxNoOfMomPerYear = await maxNoOfMomPerYear.json();
+    }
+    else {
+      throw new Error(`Status code is not 200`);
+    }
+  } catch (err) {
+    console.error(`Can't fetch the output data ${err}`);
   }
+
 
   const hightChartData = maxNoOfMomPerYear.map((item) => {
     let name = `${item.year} - ${item.name}`;
@@ -29,7 +35,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
     title: {
       text:
-        '<span style="font-size:20px;font-weight:bold;">Maximum No of Man of the Match every Year</span>',
+        '<span class="table-header">Maximum No of Man of the Match every Year</span>',
     },
 
     accessibility: {
@@ -43,7 +49,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     yAxis: {
       title: {
         text:
-          '<span style="font-size:11px;font-weight:bold;">No of Man of the Match</span>',
+          '<span class="y-axis">No of Man of the Match</span>',
       },
     },
     legend: {
@@ -61,7 +67,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     tooltip: {
       headerFormat:
-        '<span style="font-size:11px;font-weight:bold;">{series.name}</span><br>',
+        '<span class="y-axis">{series.name}</span><br>',
       pointFormat:
         '<span style="color:{point.color};font-weight:bold;">{point.name}</span>: <b>{point.y:.0f}</b><br/>',
     },

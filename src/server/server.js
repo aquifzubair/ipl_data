@@ -1,441 +1,114 @@
 const http = require("http");
-const fs = require("fs");
 const port = 3000;
+const { readJavascriptFile, readHtmlFile, readCssFile, readJsonFile } = require("./utils");
 
-const server = http.createServer((request, response) =>  {
-
-  const readGivenFile = (path) => {
-    return new Promise((resolve, reject) => {
-      fs.readFile(path, (err, content) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(content);
-        }
-      });
-    });
-  };
+const server = http.createServer((request, response) => {
 
   switch (request.url) {
     case "/": {
-      readGivenFile("./../client/index.html")
-        .then((content) => {
-          response.writeHead(200, {
-            "Content-Type": "text/html",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(content);
-          response.end();
-        })
-        .catch((err) => {
-          response.write(err);
-          response.end();
-        });
+      readHtmlFile("./../client/index.html", response);
       break;
     }
 
     case "/appjs/matchesPerYear.js": {
-      readGivenFile("./../client/appjs/matchesPerYear.js")
-        .then((content) => {
-          response.writeHead(200, {
-            "Content-Type": "text/javascript",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(content);
-          response.end();
-        })
-        .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "text/javascript",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
-        });
+      readJavascriptFile("./../client/appjs/matchesPerYear.js", response);
       break;
     }
 
     case "/matchesPerYear": {
-      readGivenFile("./../output/matchesPerYear.json")
-        .then((content) => {
-          response.writeHead(200, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(content);
-          response.end();
-        })
-        .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
-        });
+      readJsonFile("./../output/matchesPerYear.json", response);
       break;
     }
 
     case "/appjs/extraRunPerTeamIn2016.js": {
-      readGivenFile("./../client/appjs/extraRunPerTeamIn2016.js")
-        .then((content) => {
-          response.writeHead(200, {
-            "Content-Type": "text/javascript",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(content);
-          response.end();
-        })
-        .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "text/javascript",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
-        });
+      readJavascriptFile("./../client/appjs/extraRunPerTeamIn2016.js", response);
       break;
     }
 
     case "/extraRunPerTeamIn2016": {
-      readGivenFile("./../output/extraRunPerTeamIn2016.json")
-        .then((content) => {
-          response.writeHead(200, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(content);
-          response.end();
-        })
-        .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
-        });
+      readJsonFile("./../output/extraRunPerTeamIn2016.json", response);
       break;
     }
 
     case "/appjs/matchesWonPerYear.js": {
-      readGivenFile("./../client/appjs/matchesWonPerYear.js")
-        .then((content) => {
-          response.writeHead(200, {
-            "Content-Type": "text/javascript",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(content);
-          response.end();
-        })
-        .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "text/javascript",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
-        });
+      readJavascriptFile("./../client/appjs/matchesWonPerYear.js", response);
       break;
     }
 
     case "/wonMatchesPerYear": {
-      readGivenFile("./../output/wonMatchesPerYear.json")
-        .then((content) => {
-          response.writeHead(200, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(content);
-          response.end();
-        })
-        .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
-        });
+      readJsonFile("./../output/wonMatchesPerYear.json", response);
       break;
     }
 
     case "/appjs/topTenBestEconomicalBowler.js": {
-      readGivenFile("./../client/appjs/topTenBestEconomicalBowler.js")
-        .then((content) => {
-          response.writeHead(200, {
-            "Content-Type": "text/javascript",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(content);
-          response.end();
-        })
-        .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "text/javascript",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
-        });
+      readJavascriptFile("./../client/appjs/topTenBestEconomicalBowler.js",response);
       break;
     }
 
     case "/topTenBestBowlerByEconomy": {
-      readGivenFile("./../output/topTenBestBowlerByEconomy.json")
-        .then((content) => {
-          response.writeHead(200, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(content);
-          response.end();
-        })
-        .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
-        });
+      readJsonFile("./../output/topTenBestBowlerByEconomy.json", response);
       break;
     }
 
     case "/appjs/teamsWonMatchAndToss.js": {
-      readGivenFile("./../client/appjs/teamsWonMatchAndToss.js")
-        .then((content) => {
-          response.writeHead(200, {
-            "Content-Type": "text/javascript",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(content);
-          response.end();
-        })
-        .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "text/javascript",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
-        });
+      readJavascriptFile("./../client/appjs/teamsWonMatchAndToss.js", response);
       break;
     }
 
     case "/teamsWonMatchAndToss": {
-      readGivenFile("./../output/teamsWonTossAndMatch.json")
-        .then((content) => {
-          response.writeHead(200, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(content);
-          response.end();
-        })
-        .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
-        });
+      readJsonFile("./../output/teamsWonTossAndMatch.json", response);
       break;
     }
 
     case "/appjs/strikeRateOfParticularPerson.js": {
-      readGivenFile("./../client/appjs/strikeRateOfParticularPerson.js")
-        .then((content) => {
-          response.writeHead(200, {
-            "Content-Type": "text/javascript",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(content);
-          response.end();
-        })
-        .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "text/javascript",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
-        });
+      readJavascriptFile("./../client/appjs/strikeRateOfParticularPerson.js",response);
       break;
     }
 
     case "/strikeRateOfParticularPerson": {
-      readGivenFile("./../output/strikeRateOfParticularPerson.json")
-        .then((content) => {
-          response.writeHead(200, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(content);
-          response.end();
-        })
-        .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
-        });
+      readJsonFile("./../output/strikeRateOfParticularPerson.json", response);
       break;
     }
 
     case "/appjs/bowlerOfBestEconomy.js": {
-      readGivenFile("./../client/appjs/bowlerOfBestEconomy.js")
-        .then((content) => {
-          response.writeHead(200, {
-            "Content-Type": "text/javascript",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(content);
-          response.end();
-        })
-        .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "text/javascript",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
-        });
+      readJavascriptFile("./../client/appjs/bowlerOfBestEconomy.js", response);
       break;
     }
 
     case "/bowlerOfBestEconomy": {
-      readGivenFile("./../output/bowlerHavingBestEconomyInSuperOver.json")
-        .then((content) => {
-          response.writeHead(200, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(content);
-          response.end();
-        })
-        .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
-        });
+      readJsonFile("./../output/bowlerHavingBestEconomyInSuperOver.json", response);
       break;
     }
 
     case "/appjs/mostTimePlayerDismissedByOtherPlayer.js": {
-      readGivenFile("./../client/appjs/mostTimePlayerDismissedByOtherPlayer.js")
-        .then((content) => {
-          response.writeHead(200, {
-            "Content-Type": "text/javascript",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(content);
-          response.end();
-        })
-        .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "text/javascript",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
-        });
+      readJavascriptFile("./../client/appjs/mostTimePlayerDismissedByOtherPlayer.js",response);
       break;
     }
 
     case "/mostTimePlayerDismissedByOtherPlayer": {
-      readGivenFile("./../output/mostTimePlayerDismissedByOtherPlayer.json")
-        .then((content) => {
-          response.writeHead(200, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(content);
-          response.end();
-        })
-        .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
-        });
+      readJsonFile("./../output/mostTimePlayerDismissedByOtherPlayer.json",response);
+
       break;
     }
 
     case "/appjs/highestNumberOfMomEveryYear.js": {
-      readGivenFile("./../client/appjs/highestNumberOfMomEveryYear.js")
-        .then((content) => {
-          response.writeHead(200, {
-            "Content-Type": "text/javascript",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(content);
-          response.end();
-        })
-        .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "text/javascript",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
-        });
+      readJavascriptFile("./../client/appjs/highestNumberOfMomEveryYear.js",response);
       break;
     }
-    
+
     case "/highestNumberOfMomEveryYear": {
-      readGivenFile("./../output/highestNumberOfMomEveryYear.json")
-        .then((content) => {
-          response.writeHead(200, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(content);
-          response.end();
-        })
-        .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
-        });
+      readJsonFile("./../output/highestNumberOfMomEveryYear.json", response);
       break;
     }
 
     case "/app.css": {
-      readGivenFile("./../client/app.css")
-        .then((content) => {
-          response.writeHead(200, {
-            "Content-Type": "text/css",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(content);
-          response.end();
-        })
-        .catch((err) => {
-          response.writeHead(500, {
-            "Content-Type": "text/css",
-            "Access-Control-Allow-Origin": "*",
-          });
-          response.write(err);
-          response.end();
-        });
+      readCssFile("./../client/app.css", response);
       break;
     }
 
     default: {
       response.writeHead(404, {
-        "Content-Type": "text/json",
+        "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
       });
       response.write("404 Oops! page not found");

@@ -9,10 +9,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         "Access-Control-Allow-Origin": "*",
       }
     );
-    wonMatchesAndToss = await wonMatchesAndToss.json();
+
+    if (wonMatchesAndToss.status === 200) {
+      wonMatchesAndToss = await wonMatchesAndToss.json();
+    }    
+    else {
+      throw new Error(`Status code is not 200`);
+    }
   } 
+  
   catch (err) {
-    console.error(err);
+    console.error(`Can't fetch the output data ${err}`);
   }
 
   const hightChartData = Object.keys(wonMatchesAndToss).map((key) => {
@@ -28,7 +35,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
     title: {
       text:
-        '<span style="font-size:20px;font-weight:bold;">Number of Matches Team Won Toss as well as Match</span>',
+        '<span class="table-header">Number of Matches Team Won Toss as well as Match</span>',
     },
 
     accessibility: {
@@ -42,7 +49,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     yAxis: {
       title: {
         text:
-          '<span style="font-size:11px;font-weight:bold;">Total No of Matches</span>',
+          '<span class="y-axis">Total No of Matches</span>',
       },
     },
     legend: {
@@ -60,7 +67,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     tooltip: {
       headerFormat:
-        '<span style="font-size:11px;font-weight:bold;">{series.name}</span><br>',
+        '<span class="y-axis">{series.name}</span><br>',
       pointFormat:
         '<span style="color:{point.color};font-weight:bold;">{point.name}</span>: <b>{point.y:.0f}</b><br/>',
     },

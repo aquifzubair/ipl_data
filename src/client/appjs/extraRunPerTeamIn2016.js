@@ -9,10 +9,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         "Access-Control-Allow-Origin": "*",
       }
     );
-    extraRunPerTeamIn2016 = await extraRunPerTeamIn2016.json();
-  }
+
+    if (extraRunPerTeamIn2016.status === 200) {
+      extraRunPerTeamIn2016 = await extraRunPerTeamIn2016.json();
+    } 
+    else {
+      throw new Error(`Status code is not 200`);
+    }
+  } 
+  
   catch (err) {
-    console.error(err);
+    console.error(`Can't fetch the output data ${err}`);
   }
 
   const hightChartData = Object.keys(extraRunPerTeamIn2016).map((key) => {
@@ -27,8 +34,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       type: "column",
     },
     title: {
-      text:
-        '<span style="font-size:20px;font-weight:bold;">Extra Run Per Team in 2016</span>',
+      text: '<span class="table-header">Extra Run Per Team in 2016</span>',
     },
 
     accessibility: {
@@ -41,8 +47,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
     yAxis: {
       title: {
-        text:
-          '<span style="font-size:11px;font-weight:bold;">Total No of Extra Runs</span>',
+        text: '<span class="y-axis">Total No of Extra Runs</span>',
       },
     },
     legend: {
@@ -59,8 +64,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
 
     tooltip: {
-      headerFormat:
-        '<span style="font-size:11px;font-weight:bold;">{series.name}</span><br>',
+      headerFormat: '<span class="y-axis">{series.name}</span><br>',
       pointFormat:
         '<span style="color:{point.color};font-weight:bold;">{point.name}</span>: <b>{point.y:.0f}</b><br/>',
     },

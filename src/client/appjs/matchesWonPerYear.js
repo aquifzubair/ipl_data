@@ -6,10 +6,17 @@ document.addEventListener("DOMContentLoaded", async () => {
       "Content-Type": "text/json",
       "Access-Control-Allow-Origin": "*",
     });
-    matchesWonPerYear = await matchesWonPerYear.json();
+
+    if (matchesWonPerYear.status === 200) {
+      matchesWonPerYear = await matchesWonPerYear.json();
+    }    
+    else {
+      throw new Error(`Status code is not 200`);
+    }
   } 
+  
   catch (err) {
-    console.error(err);
+    console.error(`Can't fetch the output data ${err}`);
   }
 
   const year = Object.keys(matchesWonPerYear).map((key) => {
@@ -52,7 +59,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
     title: {
       text:
-        '<span style="font-size:20px;font-weight:bold;">Matches Won Per Year</span>',
+        '<span class="table-header">Matches Won Per Year</span>',
     },
     xAxis: {
       categories: year,
@@ -62,12 +69,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       min: 0,
       title: {
         text:
-          '<span style="font-size:11px;font-weight:bold;">No of Matches Won</span>',
+          '<span class="y-axis">No of Matches Won</span>',
       },
     },
     tooltip: {
       headerFormat:
-        '<span style="font-size:10px;font-weight:bold;">{point.key}</span><table>',
+        '<span class="y-axis">{point.key}</span><table>',
       pointFormat:
         '<tr><td style="color:{series.color};padding:0;font-weight:bold;">{series.name}: </td>' +
         '<td style="padding:0"><b>{point.y:.0f} win</b></td></tr>',

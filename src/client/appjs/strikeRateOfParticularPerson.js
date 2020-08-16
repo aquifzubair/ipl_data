@@ -9,10 +9,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         "Access-Control-Allow-Origin": "*",
       }
     );
-    strikeRateOfDhoni = await strikeRateOfDhoni.json();
+    
+    if (strikeRateOfDhoni.status === 200) {
+      strikeRateOfDhoni = await strikeRateOfDhoni.json();
+    }    
+    else {
+      throw new Error(`Status code is not 200`);
+    }
   } 
+  
   catch (err) {
-    console.error(err);
+    console.error(`Can't fetch the output data ${err}`);
   }
 
   const highChartData = [];
@@ -35,7 +42,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
     title: {
       text:
-        '<span style="font-size:20px;font-weight:bold;">Strike rate of Dhone every Year in IPL</span>',
+        '<span class="table-header">Strike rate of Dhone every Year in IPL</span>',
     },
 
     accessibility: {
@@ -49,7 +56,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     yAxis: {
       title: {
         text:
-          '<span style="font-size:11px;font-weight:bold;">Strike Rate</span>',
+          '<span class="y-axis">Strike Rate</span>',
       },
     },
     legend: {
@@ -67,7 +74,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     tooltip: {
       headerFormat:
-        '<span style="font-size:11px;font-weight:bold;">{series.name}</span><br>',
+        '<span class="y-axis">{series.name}</span><br>',
       pointFormat:
         '<span style="color:{point.color};font-weight:bold;">{point.name}</span>: <b>{point.y:.2f}</b><br/>',
     },

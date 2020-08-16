@@ -6,11 +6,19 @@ document.addEventListener("DOMContentLoaded", async () => {
       "Content-Type": "text/json",
       "Access-Control-Allow-Origin": "*",
     });
-    matchesPerYear = await matchesPerYear.json();
+
+    if (matchesPerYear.status === 200) {
+      matchesPerYear = await matchesPerYear.json();
+    }    
+    else {
+      throw new Error(`Status code is not 200`);
+    }
   } 
+  
   catch (err) {
-    console.log(err);
+    console.error(`Can't fetch the output data ${err}`);
   }
+
 
   const hightChartData = Object.keys(matchesPerYear).map((key) => {
     return {
@@ -25,7 +33,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
     title: {
       text:
-        '<span style="font-size:20px;font-weight:bold;">Number of Matches Every Year in IPL</span>',
+        '<span class="table-header">Number of Matches Every Year in IPL</span>',
     },
 
     accessibility: {
@@ -38,8 +46,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
     yAxis: {
       title: {
-        text:
-          '<span style="font-size:11px;font-weight:bold;">Total No of Matches</span>',
+        text: '<span class="y-axis">Total No of Matches</span>',
       },
     },
     legend: {
@@ -56,8 +63,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
 
     tooltip: {
-      headerFormat:
-        '<span style="font-size:11px;font-weight:bold;">{series.name}</span><br>',
+      headerFormat: '<span class="y-axis">{series.name}</span><br>',
       pointFormat:
         '<span style="color:{point.color};font-weight:bold;">{point.name}</span>: <b>{point.y:.0f}</b><br/>',
     },

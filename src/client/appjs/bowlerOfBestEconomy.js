@@ -10,11 +10,19 @@ document.addEventListener("DOMContentLoaded", async () => {
         "Access-Control-Allow-Origin": "*",
       }
     );
-    bowlerOfBestEconomy = await bowlerOfBestEconomy.json();
+
+    if (bowlerOfBestEconomy.status === 200) {
+      bowlerOfBestEconomy = await bowlerOfBestEconomy.json();
+    }
+    else {
+      throw new Error(`Status code is not 200`);
+    }
   } 
+  
   catch (err) {
-    console.error(err);
+    console.error(`Can't fetch the output data ${err}`);
   }
+
 
   const hightChartData = [
     { name: bowlerOfBestEconomy.name, y: bowlerOfBestEconomy.economy },
@@ -26,7 +34,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
     title: {
       text:
-        '<span style="font-size:20px;font-weight:bold;">Best Bowler in Super Over By Economy</span>',
+        '<span class="table-header">Best Bowler in Super Over By Economy</span>',
     },
 
     accessibility: {
@@ -39,7 +47,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
     yAxis: {
       title: {
-        text: '<span style="font-size:11px;font-weight:bold;">Economy</span>',
+        text: '<span class="y-axis">Economy</span>',
       },
     },
     legend: {
@@ -57,7 +65,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     tooltip: {
       headerFormat:
-        '<span style="font-size:11px;font-weight:bold;">{series.name}</span><br>',
+        '<span class="y-axis">{series.name}</span><br>',
       pointFormat:
         '<span style="color:{point.color};font-weight:bold;">{point.name}</span>: <b>{point.y:.0f}</b><br/>',
     },

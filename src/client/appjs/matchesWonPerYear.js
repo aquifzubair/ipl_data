@@ -3,15 +3,23 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   try {
     matchesWonPerYear = await fetch(
-      "http://localhost:3000/wonMatchesPerYear",
+      "http://localhost:3000/matchesWonPerYear",
       {
         "Content-Type": "text/json",
         "Access-Control-Allow-Origin": "*",
       }
     );
-    matchesWonPerYear = await matchesWonPerYear.json();
-  } catch (err) {
-    console.error(err);
+
+    if (matchesWonPerYear.status === 200) {
+      matchesWonPerYear = await matchesWonPerYear.json();
+    }
+    else {
+      throw new Error(`Status code is not 200`);
+    }
+  } 
+  
+  catch (err) {
+    console.error(`Can't fetch the output data ${err}`);
   }
 
   const baseSeason = 2008;
@@ -46,7 +54,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
     title: {
       text:
-        '<span style="font-size:20px;font-weight:bold;">Matches Won Per Year</span>',
+        '<span class="table-header">Matches Won Per Year</span>',
     },
     xAxis: {
       categories: uniqueYear,
@@ -56,7 +64,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       min: 0,
       title: {
         text:
-          '<span style="font-size:11px;font-weight:bold;">No of Matches Won</span>',
+          '<span class="y-axis">No of Matches Won</span>',
       },
     },
     tooltip: {

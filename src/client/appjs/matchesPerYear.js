@@ -2,14 +2,24 @@ document.addEventListener("DOMContentLoaded", async () => {
   let matchesPerYear;
 
   try {
-    matchesPerYear = await fetch("http://localhost:3000/matchesPerYear", {
-      "Content-Type": "text/json",
-      "Access-Control-Allow-Origin": "*",
-    });
-    matchesPerYear = await matchesPerYear.json();
+    matchesPerYear = await fetch(
+      "http://localhost:3000/matchesPerYear",
+      {
+        "Content-Type": "text/json",
+        "Access-Control-Allow-Origin": "*",
+      }
+    );
+
+    if (matchesPerYear.status === 200) {
+      matchesPerYear = await matchesPerYear.json();
+    }
+    else {
+      throw new Error(`Status code is not 200`);
+    }
   } 
+  
   catch (err) {
-    console.log(err);
+    console.error(`Can't fetch the output data ${err}`);
   }
 
   const hightChartData = matchesPerYear.map(elem => {
@@ -26,7 +36,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
     title: {
       text:
-        '<span style="font-size:20px;font-weight:bold;">Number of Matches Every Year in IPL</span>',
+        '<span class="table-header">Number of Matches Every Year in IPL</span>',
     },
 
     accessibility: {
@@ -40,7 +50,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     yAxis: {
       title: {
         text:
-          '<span style="font-size:11px;font-weight:bold;">Total No of Matches</span>',
+          '<span class="y-axis">Total No of Matches</span>',
       },
     },
     legend: {

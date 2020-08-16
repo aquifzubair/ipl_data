@@ -9,10 +9,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         "Access-Control-Allow-Origin": "*",
       }
     );
-    topTenBestEconomicalBowler = await topTenBestEconomicalBowler.json();
+
+    if (topTenBestEconomicalBowler.status === 200) {
+      topTenBestEconomicalBowler = await topTenBestEconomicalBowler.json();
+    }
+    else {
+      throw new Error(`Status code is not 200`);
+    }
   } 
+  
   catch (err) {
-    console.error(err);
+    console.error(`Can't fetch the output data ${err}`);
   }
 
   const hightChartData = topTenBestEconomicalBowler.map((key) => {
@@ -28,7 +35,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
     title: {
       text:
-        '<span style="font-size:20px;font-weight:bold;">Top ten Economical Bowlers in 2015</span>',
+        '<span class="table-header">Top ten Economical Bowlers in 2015</span>',
     },
 
     accessibility: {
@@ -42,7 +49,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     yAxis: {
       title: {
         text:
-          '<span style="font-size:11px;font-weight:bold;">Bowler Economy</span>',
+          '<span class="y-axis">Bowler Economy</span>',
       },
     },
     legend: {

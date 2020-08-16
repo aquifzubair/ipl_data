@@ -9,10 +9,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         "Access-Control-Allow-Origin": "*",
       }
     );
-    highestTimeOutPlayers = await highestTimeOutPlayers.json();
+
+    if (highestTimeOutPlayers.status === 200) {
+      highestTimeOutPlayers = await highestTimeOutPlayers.json();
+    }
+    else {
+      throw new Error(`Status code is not 200`);
+    }
   } 
+  
   catch (err) {
-    console.error(err);
+    console.error(`Can't fetch the output data ${err}`);
   }
 
   const hightChartData = highestTimeOutPlayers.map((key) => {
@@ -28,7 +35,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
     title: {
       text:
-        '<span style="font-size:20px;font-weight:bold;">Player Out Maximum No of Time by a particular Player</span>',
+        '<span class="table-header">Player Out Maximum No of Time by a particular Player</span>',
     },
 
     accessibility: {
@@ -42,7 +49,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     yAxis: {
       title: {
         text:
-          '<span style="font-size:11px;font-weight:bold;">Total No of Outs</span>',
+          '<span class="y-axis">Total No of Outs</span>',
       },
     },
     legend: {

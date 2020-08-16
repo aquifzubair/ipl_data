@@ -3,11 +3,23 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   try {
     maxNoOfMomPerYear = await fetch(
-      "http://localhost:3000/highestNumberOfMomEveryYear"
+      "http://localhost:3000/highestNumberOfMomEveryYear",
+      {
+        "Content-Type": "text/json",
+        "Access-Control-Allow-Origin": "*",
+      }
     );
-    maxNoOfMomPerYear = await maxNoOfMomPerYear.json();
-  } catch (err) {
-    console.error(err);
+
+    if (maxNoOfMomPerYear.status === 200) {
+      maxNoOfMomPerYear = await maxNoOfMomPerYear.json();
+    }
+    else {
+      throw new Error(`Status code is not 200`);
+    }
+  } 
+  
+  catch (err) {
+    console.error(`Can't fetch the output data ${err}`);
   }
 
   const hightChartData = maxNoOfMomPerYear.map((item) => {
@@ -24,7 +36,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
     title: {
       text:
-        '<span style="font-size:20px;font-weight:bold;">Maximum No of Man of the Match every Year</span>',
+        '<span class="table-header">Maximum No of Man of the Match every Year</span>',
     },
 
     accessibility: {
@@ -38,7 +50,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     yAxis: {
       title: {
         text:
-          '<span style="font-size:11px;font-weight:bold;">No of Man of the Match</span>',
+          '<span class="y-axis">No of Man of the Match</span>',
       },
     },
     legend: {

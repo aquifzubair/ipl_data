@@ -9,10 +9,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         "Access-Control-Allow-Origin": "*",
       }
     );
-    extraRunPerTeamIn2016 = await extraRunPerTeamIn2016.json();
-  }
+
+    if (extraRunPerTeamIn2016.status === 200) {
+      extraRunPerTeamIn2016 = await extraRunPerTeamIn2016.json();
+    }
+    else {
+      throw new Error(`Status code is not 200`);
+    }
+  } 
+  
   catch (err) {
-    console.error(err);
+    console.error(`Can't fetch the output data ${err}`);
   }
 
   const hightChartData = extraRunPerTeamIn2016.map((key) => {
@@ -28,7 +35,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
     title: {
       text:
-        '<span style="font-size:20px;font-weight:bold;">Extra Run Per Team in 2016</span>',
+        '<span class="table-header">Extra Run Per Team in 2016</span>',
     },
 
     accessibility: {
@@ -42,7 +49,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     yAxis: {
       title: {
         text:
-          '<span style="font-size:11px;font-weight:bold;">Total No of Extra Runs</span>',
+          '<span class="y-axis">Total No of Extra Runs</span>',
       },
     },
     legend: {

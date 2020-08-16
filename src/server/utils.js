@@ -59,9 +59,7 @@ const errorHandler = (response, err) => {
           response.write(content);
           response.end();
         })
-        .catch((err) => {
-          errorHandler(response, err);
-        });
+        .catch((err) => errorHandler(response, err));
   }
 
   const readJavascriptFile = (path, response) => {
@@ -74,9 +72,7 @@ const errorHandler = (response, err) => {
           response.write(content);
           response.end();
         })
-        .catch((err) => {
-          errorHandler(response, err);
-        });
+        .catch((err) => errorHandler(response, err));
   }
 
   const readCssFile = (path,response) => {
@@ -89,9 +85,7 @@ const errorHandler = (response, err) => {
           response.write(content);
           response.end();
         })
-        .catch((err) => {
-          errorHandler(response, err);
-        });
+        .catch((err) => errorHandler(response, err));
   }
 
 module.exports = {

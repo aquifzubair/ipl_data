@@ -38,7 +38,7 @@ const server = http.createServer((request, response) => {
       break;
     }
 
-    case "/wonMatchesPerYear": {
+    case "/matchesWonPerYear": {
       sqlQueries.matchesWonPerYear(response);
       break;
     }

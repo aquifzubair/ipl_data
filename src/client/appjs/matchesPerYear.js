@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   let matchesPerYear;
 
   try {
-    matchesPerYear = await fetch("http://localhost:3000/matchesPerYearSql", {
+    matchesPerYear = await fetch("http://localhost:3000/matchesPerYear", {
       "Content-Type": "text/json",
       "Access-Control-Allow-Origin": "*",
     });

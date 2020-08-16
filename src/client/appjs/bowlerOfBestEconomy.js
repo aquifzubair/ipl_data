@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   
   try {
     bowlerOfBestEconomy = await fetch(
-      "http://localhost:3000/bowlerOfBestEconomySql",
+      "http://localhost:3000/bowlerOfBestEconomy",
       {
         "Content-Type": "text/json",
         "Access-Control-Allow-Origin": "*",

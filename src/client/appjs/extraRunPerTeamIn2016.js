@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   try {
     extraRunPerTeamIn2016 = await fetch(
-      "http://localhost:3000/extraRunPerTeamIn2016Sql",
+      "http://localhost:3000/extraRunPerTeamIn2016",
       {
         "Content-Type": "text/json",
         "Access-Control-Allow-Origin": "*",

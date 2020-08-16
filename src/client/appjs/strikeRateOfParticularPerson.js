@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   try {
     strikeRateOfDhoni = await fetch(
-      "http://localhost:3000/strikeRateOfParticularPersonSql",
+      "http://localhost:3000/strikeRateOfParticularPerson",
       {
         "Content-Type": "text/json",
         "Access-Control-Allow-Origin": "*",

@@ -6,7 +6,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       "http://localhost:3000/highestNumberOfMomEveryYear"
     );
     maxNoOfMomPerYear = await maxNoOfMomPerYear.json();
-    console.log(maxNoOfMomPerYear);
   } catch (err) {
     console.error(err);
   }

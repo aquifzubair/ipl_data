@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   try {
     topTenBestEconomicalBowler = await fetch(
-      "http://localhost:3000/topTenBestBowlerByEconomySql",
+      "http://localhost:3000/topTenBestBowlerByEconomy",
       {
         "Content-Type": "text/json",
         "Access-Control-Allow-Origin": "*",

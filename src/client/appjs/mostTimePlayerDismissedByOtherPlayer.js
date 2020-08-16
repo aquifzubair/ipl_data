@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   
   try {
     highestTimeOutPlayers = await fetch(
-      "http://localhost:3000/mostTimePlayerDismissedByOtherPlayerSql",
+      "http://localhost:3000/mostTimePlayerDismissedByOtherPlayer",
       {
         "Content-Type": "text/json",
         "Access-Control-Allow-Origin": "*",

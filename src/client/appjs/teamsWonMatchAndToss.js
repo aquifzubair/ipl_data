@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   try {
     wonMatchesAndToss = await fetch(
-      "http://localhost:3000/teamsWonMatchAndTossSql",
+      "http://localhost:3000/teamsWonMatchAndToss",
       {
         "Content-Type": "text/json",
         "Access-Control-Allow-Origin": "*",

@@ -33,4 +33,4 @@ async function runFunctions() {
   bowlerHavingBestEconomyInSuperOver(deliveryJsonData);
 }
 
-runFunctions();
+module.exports = runFunctions;

@@ -1,6 +1,9 @@
 const http = require("http");
 const port = 3000;
 const { readJavascriptFile, readHtmlFile, readCssFile, readJsonFile } = require("./utils");
+const runFunction = require("./index")
+
+runFunction();
 
 const server = http.createServer((request, response) => {
 

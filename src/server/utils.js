@@ -16,6 +16,27 @@ connection.connect((err) => {
     console.log("Connected to the MySQL server.");
   });
 
+  const createDatabase = async () => {
+    const createDbQuery = `CREATE DATABASE IF NOT EXISTS ipl_data;`
+    const useDbQuery = `USE ipl_data`;
+
+    const createTableForMatchesQuery = `create table if not exists matches ( id int, season smallint,city char(30), date date, team1 char(50), team2 char(50), toss_winner char(50), toss_decision char(10), result char(10), dl_applied smallint, winner char(50), win_by_runs smallint, win_by_wickets smallint, player_of_match char(50), venue char(100), umpire1 char(50), umpire2 char(50), umpire3 char(50));`
+    const createTableForDeliveriesQuery = `create table if not exists deliveries( match_id smallint, inning smallint, batting_team char(50), bowling_team char(50), over smallint, ball smallint, batsman char(100), non_striker char(100), bowler char(100), is_super_over smallint, wide_runs smallint, bye_runs smallint, legbye_runs smallint, noball_runs smallint, penalty_runs smallint, batsman_runs smallint, extra_runs smallint, total_runs smallint, player_dismissed char(100), dismissal_kind char(50), fielder char(100));`
+    
+    const insertIntoMatchesTableQuery = `LOAD DATA LOCAL INFILE './../data/matches.csv' INTO TABLE matches FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;`
+    const insertIntoDeliveriesTableQuery = `LOAD DATA LOCAL INFILE './../data/deliveries.csv' INTO TABLE deliveries FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;`
+    
+    await queryPromise(createDbQuery);
+    await queryPromise(useDbQuery);
+
+    await queryPromise(createTableForMatchesQuery);
+    await queryPromise(createTableForDeliveriesQuery);
+
+    await queryPromise(insertIntoMatchesTableQuery);
+    await queryPromise(insertIntoDeliveriesTableQuery); 
+    
+  }
+
 const errorHandler = (response, err) => {
     response.writeHead(500, {
       "content-type": "application/json",
@@ -95,5 +116,6 @@ module.exports = {
     readGivenFile,
     readHtmlFile,
     readJavascriptFile,
-    readCssFile
+    readCssFile,
+    createDatabase
 }

@@ -2,8 +2,10 @@ const http = require("http");
 const { port } = require("./../../config");
 const portNo = port;
 
-const {readHtmlFile, readJavascriptFile, readCssFile} = require("./utils");
+const {readHtmlFile, readJavascriptFile, readCssFile, createDatabase} = require("./utils");
 const sqlQueries = require("./sqlSolution/allQueries");
+
+createDatabase();
 
 const server = http.createServer((request, response) => {
 

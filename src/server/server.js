@@ -1,15 +1,16 @@
 const http = require("http");
 const { port } = require("./../../config");
-const portNo = port;
 
-const {readHtmlFile, readJavascriptFile, readCssFile, createDatabase} = require("./utils");
-const sqlQueries = require("./sqlSolution/allQueries");
+const portNo = port;
+const { readHtmlFile, readJavascriptFile, readCssFile, queryFunction, createDatabase } = require("./utils");
+const sqlQueries = require("./sqlSolution/solutionQuery");
 
 createDatabase();
 
 const server = http.createServer((request, response) => {
 
   switch (request.url) {
+    
     case "/": {
       readHtmlFile("./../client/index.html", response);
       break;
@@ -21,92 +22,107 @@ const server = http.createServer((request, response) => {
     }
 
     case "/matchesPerYear": {
-      sqlQueries.matchesPerYear(response);
+      queryFunction(sqlQueries.matchesPerYear, response);
       break;
     }
 
     case "/appjs/extraRunPerTeamIn2016.js": {
-      readJavascriptFile("./../client/appjs/extraRunPerTeamIn2016.js", response);      
+      readJavascriptFile(
+        "./../client/appjs/extraRunPerTeamIn2016.js",
+        response
+      );
       break;
     }
 
     case "/extraRunPerTeamIn2016": {
-      sqlQueries.extraRunPerTeamIn2016(response);
+      queryFunction(sqlQueries.extraRunPerTeamIn2016, response);
       break;
     }
 
     case "/appjs/matchesWonPerYear.js": {
-      readJavascriptFile("./../client/appjs/matchesWonPerYear.js", response);      
+      readJavascriptFile("./../client/appjs/matchesWonPerYear.js", response);
       break;
     }
 
     case "/matchesWonPerYear": {
-      sqlQueries.matchesWonPerYear(response);
+      queryFunction(sqlQueries.matchesWonPerYear, response);
       break;
     }
 
     case "/appjs/topTenBestEconomicalBowler.js": {
-      readJavascriptFile("./../client/appjs/topTenBestEconomicalBowler.js", response);      
+      readJavascriptFile(
+        "./../client/appjs/topTenBestEconomicalBowler.js",
+        response
+      );
       break;
     }
 
     case "/topTenBestBowlerByEconomy": {
-      sqlQueries.topTenBestEconomicalBowler(response);
+      queryFunction(sqlQueries.topTenBestEconomicalBowler, response);
       break;
     }
 
     case "/appjs/teamsWonMatchAndToss.js": {
-     readJavascriptFile("./../client/appjs/teamsWonMatchAndToss.js", response);  
+      readJavascriptFile("./../client/appjs/teamsWonMatchAndToss.js", response);
       break;
     }
 
     case "/teamsWonMatchAndToss": {
-      sqlQueries.teamsWonMatchAndToss(response);
+      queryFunction(sqlQueries.teamsWonMatchAndToss, response);
       break;
     }
 
     case "/appjs/strikeRateOfParticularPerson.js": {
-      readJavascriptFile("./../client/appjs/strikeRateOfParticularPerson.js", response);      
+      readJavascriptFile(
+        "./../client/appjs/strikeRateOfParticularPerson.js",
+        response
+      );
       break;
     }
 
     case "/strikeRateOfParticularPerson": {
-      sqlQueries.strikeRateOfParticularPerson(response);
+      queryFunction(sqlQueries.strikeRateOfParticularPerson, response);
       break;
     }
 
     case "/appjs/bowlerOfBestEconomy.js": {
-      readJavascriptFile("./../client/appjs/bowlerOfBestEconomy.js", response);     
+      readJavascriptFile("./../client/appjs/bowlerOfBestEconomy.js", response);
       break;
     }
 
     case "/bowlerOfBestEconomy": {
-      sqlQueries.bowlerOfBestEconomy(response);
+      queryFunction(sqlQueries.bowlerOfBestEconomy, response);
       break;
     }
 
     case "/appjs/mostTimePlayerDismissedByOtherPlayer.js": {
-      readJavascriptFile("./../client/appjs/mostTimePlayerDismissedByOtherPlayer.js", response);      
+      readJavascriptFile(
+        "./../client/appjs/mostTimePlayerDismissedByOtherPlayer.js",
+        response
+      );
       break;
     }
 
     case "/mostTimePlayerDismissedByOtherPlayer": {
-      sqlQueries.mostTimePlayerDismissedByOtherPlayer(response);
+      queryFunction(sqlQueries.mostTimePlayerDismissedByOtherPlayer, response);
       break;
     }
 
     case "/appjs/highestNumberOfMomEveryYear.js": {
-      readJavascriptFile("./../client/appjs/highestNumberOfMomEveryYear.js", response);      
+      readJavascriptFile(
+        "./../client/appjs/highestNumberOfMomEveryYear.js",
+        response
+      );
       break;
     }
 
     case "/highestNumberOfMomEveryYear": {
-      sqlQueries.highestNumberOfMomEveryYear(response);
+      queryFunction(sqlQueries.highestNumberOfMomEveryYear, response);
       break;
     }
 
     case "/app.css": {
-      readCssFile("./../client/app.css",response);
+      readCssFile("./../client/app.css", response);
       break;
     }
 
@@ -118,7 +134,6 @@ const server = http.createServer((request, response) => {
       response.write("404 Oops! page not found");
       response.end();
     }
-    
   }
 });
 

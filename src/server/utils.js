@@ -1,6 +1,5 @@
 const mysql = require("mysql");
 const { host, password, user } = require("../../config");
-
 const fs = require("fs");
 const dbQuery = require("./sqlSolution/createDbQueries");
 
@@ -29,26 +28,39 @@ const queryPromise = (query) => {
   });
 };
 
-const createDatabase = () => {
+const loadDataFromCsv = () => {
+  queryPromise(dbQuery.numOfRowsInMatchTable)
+    .then((data) => {
+      if (data[0].num_of_rows == 0) {
+        queryPromise(dbQuery.insertIntoMatchesTableQuery)
+          .then(() => console.log("data is inserted in matches"))
+          .catch((err) => console.error(err));
+      }
+    })
+    .catch((err) => console.error(err));
 
+  queryPromise(dbQuery.numOfRowsInDeliveryTable)
+    .then((data) => {
+      if (data[0].num_of_rows == 0) {
+        queryPromise(dbQuery.insertIntoDeliveriesTableQuery)
+          .then(() => console.log("data is inserted in deliveries"))
+          .catch((err) => console.error(err));
+      }
+    })
+    .catch((err) => console.error(err));
+};
+
+const createDatabase = () => {
   let promises = [
     queryPromise(dbQuery.createDbQuery),
     queryPromise(dbQuery.useDbQuery),
-    queryPromise(dbQuery.createTableForMatchesQuery),
     queryPromise(dbQuery.createTableForDeliveriesQuery),
-    queryPromise(dbQuery.insertIntoMatchesTableQuery),
-    queryPromise(dbQuery.insertIntoDeliveriesTableQuery),
+    queryPromise(dbQuery.createTableForMatchesQuery),
   ];
 
-  let promiseResults = Promise.all(promises);
-
-  promiseResults
-    .then(() => {
-      console.log("database and tables are created...");
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+  Promise.all(promises)
+    .then(() => loadDataFromCsv())
+    .catch((err) => console.error(err));
 };
 
 const errorHandler = (response, err) => {

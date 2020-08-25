@@ -1,5 +1,7 @@
-const createDbQuery = `CREATE DATABASE IF NOT EXISTS ipl_data2;`;
-const useDbQuery = `USE ipl_data2;`;
+const { database } = require("../../../config");
+
+const createDbQuery = `CREATE DATABASE IF NOT EXISTS ${database};`;
+const useDbQuery = `USE ${database};`;
 
 const createTableForMatchesQuery = `CREATE TABLE matches( id INT NOT NULL,season INT,city VARCHAR(20),date date,
 team1 VARCHAR(50),team2 varchar(50),toss_winner varchar(50),toss_decision varchar(10),result varchar(20),dl_applied INT,
@@ -18,11 +20,15 @@ INTO TABLE matches FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY 
 const insertIntoDeliveriesTableQuery = `LOAD DATA LOCAL INFILE './../data/deliveries.csv'
 INTO TABLE deliveries FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;`;
 
+const numOfRowsInMatchTable = `SELECT COUNT(*) AS num_of_rows FROM matches;`;
+const numOfRowsInDeliveryTable = `SELECT COUNT(*) AS num_of_rows FROM deliveries`;
 module.exports = {
     createDbQuery,
     useDbQuery,
     createTableForMatchesQuery,
     createTableForDeliveriesQuery,
     insertIntoMatchesTableQuery,
-    insertIntoDeliveriesTableQuery
+    insertIntoDeliveriesTableQuery,
+    numOfRowsInMatchTable,
+    numOfRowsInDeliveryTable
 }

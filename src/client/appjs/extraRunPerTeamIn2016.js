@@ -2,16 +2,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   let extraRunPerTeamIn2016;
 
   try {
-    extraRunPerTeamIn2016 = await fetch(
-      "http://localhost:3000/extraRunPerTeamIn2016",
-      {
-        "Content-Type": "text/json",
-        "Access-Control-Allow-Origin": "*",
-      }
-    );
+    extraRunPerTeamIn2016 = await axios.get("/extraRunPerTeamIn2016");
 
     if (extraRunPerTeamIn2016.status === 200) {
-      extraRunPerTeamIn2016 = await extraRunPerTeamIn2016.json();
+      extraRunPerTeamIn2016 = await extraRunPerTeamIn2016.data;
     }
     else {
       throw new Error(`Status code is not 200`);

@@ -2,16 +2,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   let strikeRateOfDhoni;
 
   try {
-    strikeRateOfDhoni = await fetch(
-      "http://localhost:3000/strikeRateOfParticularPerson",
-      {
-        "Content-Type": "text/json",
-        "Access-Control-Allow-Origin": "*",
-      }
-    );
+    strikeRateOfDhoni = await axios.get("/strikeRateOfParticularPerson");
 
     if (strikeRateOfDhoni.status === 200) {
-      strikeRateOfDhoni = await strikeRateOfDhoni.json();
+      strikeRateOfDhoni = await strikeRateOfDhoni.data;
     }
     else {
       throw new Error(`Status code is not 200`);

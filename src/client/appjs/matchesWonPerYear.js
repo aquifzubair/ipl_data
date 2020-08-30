@@ -2,16 +2,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   let matchesWonPerYear;
 
   try {
-    matchesWonPerYear = await fetch(
-      "http://localhost:3000/matchesWonPerYear",
-      {
-        "Content-Type": "text/json",
-        "Access-Control-Allow-Origin": "*",
-      }
-    );
+    matchesWonPerYear = await axios.get("/matchesWonPerYear");
 
     if (matchesWonPerYear.status === 200) {
-      matchesWonPerYear = await matchesWonPerYear.json();
+      matchesWonPerYear = await matchesWonPerYear.data;
     }
     else {
       throw new Error(`Status code is not 200`);

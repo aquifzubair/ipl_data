@@ -3,16 +3,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   let bowlerOfBestEconomy;
   
   try {
-    bowlerOfBestEconomy = await fetch(
-      "http://localhost:3000/bowlerOfBestEconomy",
-      {
-        "Content-Type": "text/json",
-        "Access-Control-Allow-Origin": "*",
-      }
-    );
+    bowlerOfBestEconomy = await axios.get("/bowlerOfBestEconomy");
 
     if (bowlerOfBestEconomy.status === 200) {
-      bowlerOfBestEconomy = await bowlerOfBestEconomy.json();
+      bowlerOfBestEconomy = await bowlerOfBestEconomy.data;
     }
     else {
       throw new Error(`Status code is not 200`);

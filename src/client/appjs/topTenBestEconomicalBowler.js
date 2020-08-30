@@ -2,16 +2,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   let topTenBestEconomicalBowler;
 
   try {
-    topTenBestEconomicalBowler = await fetch(
-      "http://localhost:3000/topTenBestBowlerByEconomy",
-      {
-        "Content-Type": "text/json",
-        "Access-Control-Allow-Origin": "*",
-      }
-    );
-
+    topTenBestEconomicalBowler = await axios.get("/topTenBestBowlerByEconomy");
+    
     if (topTenBestEconomicalBowler.status === 200) {
-      topTenBestEconomicalBowler = await topTenBestEconomicalBowler.json();
+      topTenBestEconomicalBowler = await topTenBestEconomicalBowler.data;
     }
     else {
       throw new Error(`Status code is not 200`);

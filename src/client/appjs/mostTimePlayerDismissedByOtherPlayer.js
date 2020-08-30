@@ -2,16 +2,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   let highestTimeOutPlayers;
   
   try {
-    highestTimeOutPlayers = await fetch(
-      "http://localhost:3000/mostTimePlayerDismissedByOtherPlayer",
-      {
-        "Content-Type": "text/json",
-        "Access-Control-Allow-Origin": "*",
-      }
-    );
+    highestTimeOutPlayers = await axios.get("/mostTimePlayerDismissedByOtherPlayer");
 
     if (highestTimeOutPlayers.status === 200) {
-      highestTimeOutPlayers = await highestTimeOutPlayers.json();
+      highestTimeOutPlayers = await highestTimeOutPlayers.data;
     }
     else {
       throw new Error(`Status code is not 200`);

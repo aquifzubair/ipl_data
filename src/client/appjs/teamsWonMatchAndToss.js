@@ -2,16 +2,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   let wonMatchesAndToss;
 
   try {
-    wonMatchesAndToss = await fetch(
-      "http://localhost:3000/teamsWonMatchAndToss",
-      {
-        "Content-Type": "text/json",
-        "Access-Control-Allow-Origin": "*",
-      }
-    );
+    wonMatchesAndToss = await axios.get("/teamsWonMatchAndToss");
 
     if (wonMatchesAndToss.status === 200) {
-      wonMatchesAndToss = await wonMatchesAndToss.json();
+      wonMatchesAndToss = await wonMatchesAndToss.data;
     }
     else {
       throw new Error(`Status code is not 200`);

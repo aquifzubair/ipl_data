@@ -2,16 +2,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   let maxNoOfMomPerYear;
 
   try {
-    maxNoOfMomPerYear = await fetch(
-      "http://localhost:3000/highestNumberOfMomEveryYear",
-      {
-        "Content-Type": "text/json",
-        "Access-Control-Allow-Origin": "*",
-      }
-    );
+    maxNoOfMomPerYear = await axios.get("/highestNumberOfMomEveryYear");
 
     if (maxNoOfMomPerYear.status === 200) {
-      maxNoOfMomPerYear = await maxNoOfMomPerYear.json();
+      maxNoOfMomPerYear = await maxNoOfMomPerYear.data;
     }
     else {
       throw new Error(`Status code is not 200`);

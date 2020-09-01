@@ -13,7 +13,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   } 
   
   catch (err) {
+    document.getElementById("container5").innerHTML = `Not able to fetch team won matches as well as toss data...`;
     console.error(`Can't fetch the output data ${err}`);
+    return;
   }
 
   const hightChartData = wonMatchesAndToss.map((key) => {

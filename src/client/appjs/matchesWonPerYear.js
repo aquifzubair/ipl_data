@@ -13,7 +13,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   } 
   
   catch (err) {
+    document.getElementById("container4").innerHTML = `Not able to fetch matches won per year data...`;
     console.error(`Can't fetch the output data ${err}`);
+    return;
   }
 
   const baseSeason = 2008;

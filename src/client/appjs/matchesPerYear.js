@@ -3,16 +3,20 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   try {
     matchesPerYear = await axios.get('/matchesPerYear');
+
     if (matchesPerYear.status === 200) {
       matchesPerYear = matchesPerYear.data;
     }
     else {
+      
       throw new Error(`Status code is not 200`);
     }
   } 
   
   catch (err) {
+    document.getElementById("container1").innerHTML = `Not able to fetch matches per year data...`;
     console.error(`Can't fetch the output data ${err}`);
+    return;
   }
 
   const hightChartData = matchesPerYear.map(elem => {

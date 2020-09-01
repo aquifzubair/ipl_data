@@ -14,7 +14,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   } 
   
   catch (err) {
+    document.getElementById("container7").innerHTML = `Not able to fetch bowler of best economy data...`;
     console.error(`Can't fetch the output data ${err}`);
+    return;
   }
 
   const hightChartData = [

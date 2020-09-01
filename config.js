@@ -1,4 +1,8 @@
-const path = `${__dirname}/.env`;
+let path1 = require('path');
+
+path = path1.join(`${__dirname}`, `.env`);
+path = path1.normalize(path)
+
 
 require("dotenv").config({ path });
 

@@ -13,7 +13,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   } 
   
   catch (err) {
+    document.getElementById("container3").innerHTML = `Not able to fetch top ten best economical bowler data...`;
     console.error(`Can't fetch the output data ${err}`);
+    return;
   }
 
   const hightChartData = topTenBestEconomicalBowler.map((key) => {

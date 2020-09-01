@@ -13,7 +13,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   } 
   
   catch (err) {
+    document.getElementById("container2").innerHTML = `Not able to fetch extra run per team in 2016 data...`;
     console.error(`Can't fetch the output data ${err}`);
+    return;
   }
 
   const hightChartData = extraRunPerTeamIn2016.map((key) => {

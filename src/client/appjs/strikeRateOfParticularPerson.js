@@ -13,7 +13,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   } 
   
   catch (err) {
+    document.getElementById("container6").innerHTML = `Not able to fetch the strike rate of Dhoni data...`;
     console.error(`Can't fetch the output data ${err}`);
+    return;
   }
 
   const highChartData = strikeRateOfDhoni.map((items) => {

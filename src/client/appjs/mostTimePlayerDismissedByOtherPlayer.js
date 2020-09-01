@@ -13,7 +13,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   } 
   
   catch (err) {
+    document.getElementById("container8").innerHTML = `Not able to fetch highest time a player dismissed by other player data...`;
     console.error(`Can't fetch the output data ${err}`);
+    return;
   }
 
   const hightChartData = highestTimeOutPlayers.map((key) => {

@@ -1,5 +1,5 @@
 const http = require("http");
-const { port } = require("./../../config");
+const { port } = require("../../config");
 
 const portNo = port;
 const { readHtmlFile, readJavascriptFile, readCssFile, queryFunction, createDatabase } = require("./utils");
@@ -12,12 +12,12 @@ const server = http.createServer((request, response) => {
   switch (request.url) {
     
     case "/": {
-      readHtmlFile("./../client/index.html", response);
+      readHtmlFile("src/client/index.html", response);
       break;
     }
 
     case "/appjs/matchesPerYear.js": {
-      readJavascriptFile("./../client/appjs/matchesPerYear.js", response);
+      readJavascriptFile("src/client/appjs/matchesPerYear.js", response);
       break;
     }
 
@@ -28,7 +28,7 @@ const server = http.createServer((request, response) => {
 
     case "/appjs/extraRunPerTeamIn2016.js": {
       readJavascriptFile(
-        "./../client/appjs/extraRunPerTeamIn2016.js",
+        "src/client/appjs/extraRunPerTeamIn2016.js",
         response
       );
       break;
@@ -40,7 +40,7 @@ const server = http.createServer((request, response) => {
     }
 
     case "/appjs/matchesWonPerYear.js": {
-      readJavascriptFile("./../client/appjs/matchesWonPerYear.js", response);
+      readJavascriptFile("src/client/appjs/matchesWonPerYear.js", response);
       break;
     }
 
@@ -51,7 +51,7 @@ const server = http.createServer((request, response) => {
 
     case "/appjs/topTenBestEconomicalBowler.js": {
       readJavascriptFile(
-        "./../client/appjs/topTenBestEconomicalBowler.js",
+        "src/client/appjs/topTenBestEconomicalBowler.js",
         response
       );
       break;
@@ -63,7 +63,7 @@ const server = http.createServer((request, response) => {
     }
 
     case "/appjs/teamsWonMatchAndToss.js": {
-      readJavascriptFile("./../client/appjs/teamsWonMatchAndToss.js", response);
+      readJavascriptFile("src/client/appjs/teamsWonMatchAndToss.js", response);
       break;
     }
 
@@ -74,7 +74,7 @@ const server = http.createServer((request, response) => {
 
     case "/appjs/strikeRateOfParticularPerson.js": {
       readJavascriptFile(
-        "./../client/appjs/strikeRateOfParticularPerson.js",
+        "src/client/appjs/strikeRateOfParticularPerson.js",
         response
       );
       break;
@@ -86,7 +86,7 @@ const server = http.createServer((request, response) => {
     }
 
     case "/appjs/bowlerOfBestEconomy.js": {
-      readJavascriptFile("./../client/appjs/bowlerOfBestEconomy.js", response);
+      readJavascriptFile("src/client/appjs/bowlerOfBestEconomy.js", response);
       break;
     }
 
@@ -97,7 +97,7 @@ const server = http.createServer((request, response) => {
 
     case "/appjs/mostTimePlayerDismissedByOtherPlayer.js": {
       readJavascriptFile(
-        "./../client/appjs/mostTimePlayerDismissedByOtherPlayer.js",
+        "src/client/appjs/mostTimePlayerDismissedByOtherPlayer.js",
         response
       );
       break;
@@ -110,7 +110,7 @@ const server = http.createServer((request, response) => {
 
     case "/appjs/highestNumberOfMomEveryYear.js": {
       readJavascriptFile(
-        "./../client/appjs/highestNumberOfMomEveryYear.js",
+        "src/client/appjs/highestNumberOfMomEveryYear.js",
         response
       );
       break;
@@ -122,7 +122,7 @@ const server = http.createServer((request, response) => {
     }
 
     case "/app.css": {
-      readCssFile("./../client/app.css", response);
+      readCssFile("src/client/app.css", response);
       break;
     }
 

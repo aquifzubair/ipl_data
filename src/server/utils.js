@@ -1,25 +1,31 @@
 const mysql = require("mysql");
-const { host, password, user } = require("../../config");
+const { host, password, user, database } = require("../../config");
 const fs = require("fs");
 const dbQuery = require("./sqlSolution/createDbQueries");
 
-const connection = mysql.createConnection({
+const pool = mysql.createPool({
   host: host,
   password: password,
   user: user,
+  database:database
 });
 
-connection.connect(function (err) {
-  if (err) {
-    throw err;
-  } else {
-    console.log("Connected to the MySQL server.....");
-  }
+pool.on('connection', function (connection) {
+  console.log('DB Connection established');
+
+  connection.on('error', function (err) {
+    console.error(new Date(), 'MySQL error', err.code);
+  });
+  connection.on('close', function (err) {
+    console.error(new Date(), 'MySQL close', err);
+  });
+
 });
+
 
 const queryPromise = (query) => {
   return new Promise((resolve, reject) => {
-    connection.query(query, (err, results) => {
+    pool.query(query, (err, results) => {
       if (err) {
         reject(err.message);
       }
@@ -28,39 +34,92 @@ const queryPromise = (query) => {
   });
 };
 
-const loadDataFromCsv = () => {
-  queryPromise(dbQuery.numOfRowsInMatchTable)
-    .then((data) => {
-      if (data[0].num_of_rows == 0) {
-        queryPromise(dbQuery.insertIntoMatchesTableQuery)
-          .then(() => console.log("data is inserted in matches"))
-          .catch((err) => console.error(err));
-      }
-    })
-    .catch((err) => console.error(err));
+const loadDataFromCsv = async () => {
+  try {
+    const data = await queryPromise(dbQuery.numOfRowsInMatchTable);
 
-  queryPromise(dbQuery.numOfRowsInDeliveryTable)
-    .then((data) => {
-      if (data[0].num_of_rows == 0) {
-        queryPromise(dbQuery.insertIntoDeliveriesTableQuery)
-          .then(() => console.log("data is inserted in deliveries"))
-          .catch((err) => console.error(err));
-      }
-    })
-    .catch((err) => console.error(err));
+    if (data[0].num_of_rows == 0){
+      await queryPromise(dbQuery.insertIntoMatchesTableQuery)
+      console.log("data is inserted in matches")
+    }
+
+    else{
+      console.log('data is already inserted')
+    }
+
+  }
+
+  catch(err){
+    throw err;
+  }
+
+
+  try {
+    const data = await queryPromise(dbQuery.numOfRowsInDeliveryTable);
+
+    if (data[0].num_of_rows == 0){
+      await queryPromise(dbQuery.insertIntoDeliveriesTableQuery)
+      console.log("data is inserted in deliveries")
+    }
+
+    else{
+      console.log('data is already inserted')
+    }
+
+  }
+
+  catch(err){
+    throw err;
+  }
+  
 };
 
-const createDatabase = () => {
-  let promises = [
-    queryPromise(dbQuery.createDbQuery),
-    queryPromise(dbQuery.useDbQuery),
-    queryPromise(dbQuery.createTableForDeliveriesQuery),
-    queryPromise(dbQuery.createTableForMatchesQuery),
-  ];
+const createDatabase = async () => {
+  
+  try{
+    await queryPromise(dbQuery.createDbQuery);
+    console.log('database created')
+  }
+  catch(err){
+    throw err;
+  }
 
-  Promise.all(promises)
-    .then(() => loadDataFromCsv())
-    .catch((err) => console.error(err));
+
+  try{
+    await queryPromise(dbQuery.useDbQuery);
+    console.log('database selected')
+  }
+  catch(err){
+    throw err;
+  }
+
+
+  try{
+    await queryPromise(dbQuery.createTableForDeliveriesQuery);
+    console.log('delivery table created')
+  }
+  catch(err){
+    throw err;
+  }
+
+
+  try{
+    await queryPromise(dbQuery.createTableForMatchesQuery)    
+    console.log('match table created')
+  }
+  catch(err){
+    throw err;
+  }
+
+
+  try{
+    await loadDataFromCsv();
+  }
+  catch(err){
+    throw err;
+  }
+
+
 };
 
 const errorHandler = (response, err) => {
@@ -77,7 +136,7 @@ const errorHandler = (response, err) => {
 };
 
 const queryFunction = (query, response) => {
-  connection.query(query, (err, results) => {
+  pool.query(query, (err, results) => {
     if (err) {
       errorHandler(response, err);
     } else {
